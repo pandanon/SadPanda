@@ -7,6 +7,8 @@ import org.ocpsoft.pretty.time.PrettyTime;
 
 import tasks.LoadPandaPageTask;
 import util.ImageSetDescription.ImageContent;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,21 +24,21 @@ public class ImageSetOverviewAdapter extends InfiniteScrollAdapter {
 	int currentPage = 0;
 	String baseUrl;
 	PrettyTime timeFormat;
-	//int columnwidth;
+
+	// int columnwidth;
 
 	public ImageSetOverviewAdapter(String baseUrl) {
 		setImageList = new ArrayList<ImageSetDescription>();
 		timeFormat = new PrettyTime();
 		this.baseUrl = baseUrl;
-		//this.columnwidth = columnwidth;
+		// this.columnwidth = columnwidth;
 	}
 
-	/*public void setColumnwidth(int columnwidth)
-	{
-		this.columnwidth = columnwidth;
-		notifyDataSetChanged();
-	}*/
-	
+	/*
+	 * public void setColumnwidth(int columnwidth) { this.columnwidth =
+	 * columnwidth; notifyDataSetChanged(); }
+	 */
+
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
@@ -54,7 +56,7 @@ public class ImageSetOverviewAdapter extends InfiniteScrollAdapter {
 		// TODO Auto-generated method stub
 		return position;
 	}
-	
+
 	@Override
 	public boolean areAllItemsEnabled() {
 		// TODO Auto-generated method stub
@@ -68,51 +70,43 @@ public class ImageSetOverviewAdapter extends InfiniteScrollAdapter {
 		ImageSetDescription description = getItem(position);
 
 		if (convertView == null)
-			convertView = View.inflate(parent.getContext(), R.layout.image_set_item_layout, null); 
-			
-		
-		//set appropriate size of image 
+			convertView = View.inflate(parent.getContext(),
+					R.layout.image_set_item_layout, null);
+
+		// set appropriate size of image
 		ImageView thumb = ViewHolder.get(convertView, R.id.setThumb);
 		thumb.setImageResource(R.drawable.sadpanda);
-		
+
 		thumb.setAdjustViewBounds(true);
-		
-		//set title
+
+		// set title
 		TextView name = ViewHolder.get(convertView, R.id.setName);
 		name.setText(description.getSetName());
 
-		//set set uploader
-		TextView uploader = ViewHolder.get(convertView, R.id.setUploader);
-		uploader.setText(description.getSetUploader());
-
-		//set date published
+		// set date published
 		TextView published = ViewHolder.get(convertView, R.id.setPublished);
 		if (description.getSetPublished() == null)
 			published.setText("Time unknown");
 		else
 			published.setText(timeFormat.format(description.getSetPublished()));
 
-		//color imageContent
+		// color imageContent
 		View imageContent = ViewHolder.get(convertView, R.id.imageContent);
 		imageContent.setBackgroundColor(ImageContent.getColor(description
 				.getSetContent()));
 
-		int pixelHeight = (int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, (float) 2, parent.getResources()
-						.getDisplayMetrics());
+		/*
+		 * int pixelHeight = (int) TypedValue.applyDimension(
+		 * TypedValue.COMPLEX_UNIT_DIP, (float) 2, parent.getResources()
+		 * .getDisplayMetrics());
+		 */
+		// scale score
+		TextView setScore = ViewHolder.get(convertView, R.id.setScore);
 
-		//scale score
-		View setScore = ViewHolder.get(convertView, R.id.setScore);
-		if (description.getSetScore() == 0)
-		{
-			setScore.setVisibility(View.INVISIBLE);
-		}
-		else {
-			setScore.setVisibility(View.VISIBLE);
-			LayoutParams params = setScore.getLayoutParams();
-			params.height = pixelHeight * description.getSetScore();
-			setScore.setLayoutParams(params);
-		}
+		setScore.setText(Html
+				.fromHtml("\n<sup><b><font color=\"white\"><small><small>"
+						+ description.getSetScore()
+						+ "</small></small></font></b></sup><small>/</small><sub><small><small>10</small></small></sub>\n"));
 
 		return convertView;
 	}
