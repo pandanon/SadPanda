@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/setThumb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_alignLeft="@+id/setThumb"
+        android:layout_alignRight="@+id/setThumb"
+        android:layout_alignBottom="@+id/setThumb"
+        android:background="#66000000">
+
+        <View
+            android:id="@+id/imageContent"
+            android:layout_width="5dp"
+            android:layout_height="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/setPublished"
+            android:background="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/setName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"           
+            android:layout_toRightOf="@+id/imageContent"
+            android:ellipsize="end"
+            android:paddingLeft="4dp"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/setUploader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/setName"
+            android:layout_toRightOf="@+id/imageContent"
+            android:ellipsize="end"
+            android:paddingLeft="4dp"
+            android:singleLine="true"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/setPublished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/setUploader"
+            android:layout_toRightOf="@+id/imageContent"
+            android:ellipsize="end"
+            android:paddingLeft="4dp"
+            android:singleLine="true"
+            android:textSize="10sp" />
+
+        <View
+            android:id="@+id/setScore"
+            android:layout_width="5dp"
+            android:layout_height="wrap_content"
+           	android:layout_alignBottom="@+id/setPublished"
+            android:layout_alignParentRight="true"
+            android:background="#FFFF00" />
+    </RelativeLayout>
+
+</RelativeLayout>
