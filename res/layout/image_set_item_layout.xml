@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/volume_item_selector"
+	android:clickable="true" >
 
     <ImageView
         android:id="@+id/setThumb"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY" />
+        android:layout_height="150dp"
+        android:scaleType="fitStart" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/setThumb"
-        android:layout_alignLeft="@+id/setThumb"
-        android:layout_alignRight="@+id/setThumb"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true"
         android:background="#66000000" >
 
         <View

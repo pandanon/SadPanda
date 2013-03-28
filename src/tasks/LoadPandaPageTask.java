@@ -21,6 +21,7 @@ import util.HtmlManipulator;
 import util.ImageSetDescription;
 import util.ImageSetDescription.ImageContent;
 import util.ImageSetOverviewAdapter;
+import util.ThumbnailLoader.PageThumbLoader;
 import android.os.AsyncTask;
 
 import com.ecchi.sadpanda.HomePageBrowser;
@@ -189,6 +190,8 @@ public class LoadPandaPageTask extends
 			return;
 
 		adapter.addItems(result);
+		
+		adapter.getThumbNailLoader().new PageThumbLoader(adapter, result).execute(); 
 	}
 
 }
