@@ -20,7 +20,6 @@ import util.ClientWrapper;
 import util.HtmlManipulator;
 import util.ImageSetDescription;
 import util.ImageSetDescription.ImageContent;
-import util.ThumbnailLoader.PageThumbLoader;
 import android.os.AsyncTask;
 
 import com.ecchi.sadpanda.HomePageBrowser;

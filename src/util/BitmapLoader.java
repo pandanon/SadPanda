@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-
-import com.ecchi.sadpanda.HomePageBrowser;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,6 +19,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
 import android.widget.ImageView;
+
+import com.ecchi.sadpanda.HomePageBrowser;
 
 public class BitmapLoader {
 	final String mDiskCacheName = "Images";
