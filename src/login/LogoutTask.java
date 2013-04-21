@@ -32,14 +32,15 @@ public class LogoutTask extends AsyncTask<Void, Void, Void> {
 			e.printStackTrace();
 		}
 
+		client.getCookies().clear();
+		
 		return null;
 	}
 
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-
-		client.getCookies().clear();
+		
 		listener.onLoggedout();
 	}
 
