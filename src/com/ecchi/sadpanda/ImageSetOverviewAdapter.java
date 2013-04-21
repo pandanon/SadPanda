@@ -8,22 +8,17 @@ import org.ocpsoft.pretty.time.PrettyTime;
 import tasks.LoadPandaPageTask;
 import util.BitmapLoader;
 import util.ImageSetDescription;
+import util.ImageSetDescription.ImageContent;
 import util.InfiniteScrollAdapter;
 import util.ViewHolder;
-import util.BitmapLoader.AsyncPrefetchTask;
-import util.ImageSetDescription.ImageContent;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.ecchi.sadpanda.R;
 
 public class ImageSetOverviewAdapter extends InfiniteScrollAdapter {
 
@@ -32,8 +27,6 @@ public class ImageSetOverviewAdapter extends InfiniteScrollAdapter {
 	String baseUrl;
 	PrettyTime timeFormat;
 	BitmapLoader bitmapLoader;
-
-	// int columnwidth;
 
 	public ImageSetOverviewAdapter(String baseUrl, Activity activity) {
 		setImageList = new ArrayList<ImageSetDescription>();

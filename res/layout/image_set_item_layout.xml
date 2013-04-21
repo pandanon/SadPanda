@@ -1,31 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="56dp"
     android:background="@drawable/volume_item_selector"
-	android:clickable="true" >
+    android:orientation="horizontal" >
+
+    <View
+        android:id="@+id/imageContent"
+        android:layout_width="5dp"
+        android:layout_height="56dp"
+        android:background="#FFFFFF" />
 
     <ImageView
         android:id="@+id/setThumb"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="4dp"
         android:scaleType="fitStart" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-		android:layout_alignParentRight="true"
-        android:background="#66000000" >
-
-        <View
-            android:id="@+id/imageContent"
-            android:layout_width="5dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@+id/setPublished"
-            android:layout_alignParentTop="true"
-            android:background="#FFFFFF" />
+        android:layout_height="56dp" >
 
         <TextView
             android:id="@+id/setName"
@@ -49,24 +44,15 @@
             android:paddingLeft="4dp"
             android:singleLine="true"
             android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/setScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="2dp"
+            android:textSize="14sp" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/setScore"
-        android:layout_alignBottom="@+id/setScore"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="#66000000" />
-
-    <TextView
-        android:id="@+id/setScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:padding="2dp"
-        android:textSize="14sp" />
-
-</RelativeLayout>
+</LinearLayout>
