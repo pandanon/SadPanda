@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="56dp"
+    android:layout_height="104dp"
     android:background="@drawable/volume_item_selector"
     android:orientation="horizontal" >
 
     <View
         android:id="@+id/imageContent"
         android:layout_width="5dp"
-        android:layout_height="56dp"
+        android:layout_height="104dp"
         android:background="#FFFFFF" />
 
     <ImageView
         android:id="@+id/setThumb"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:maxWidth="104dp"
+        android:layout_width="wrap_content"
+        android:layout_height="104dp"
         android:padding="4dp"
         android:scaleType="fitStart" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="56dp" >
+        android:layout_height="104dp" >
 
         <TextView
             android:id="@+id/setName"
@@ -32,18 +33,30 @@
             android:maxLines="2"
             android:paddingLeft="4dp"
             android:textColor="#FFFFFF"
-            android:textSize="11sp" />
+            android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/setPublished"
+        <TextView 
+            android:id="@+id/setUploader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/setName"
             android:layout_toRightOf="@+id/imageContent"
             android:ellipsize="end"
-            android:paddingLeft="4dp"
             android:singleLine="true"
-            android:textSize="10sp" />
+            android:padding="4dp"
+            android:textSize="14sp"
+            android:textColor="@drawable/grey"/>
+        
+        <TextView
+            android:id="@+id/setPublished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/imageContent"
+            android:ellipsize="end"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/setScore"
@@ -52,7 +65,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:padding="2dp"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -4,4 +4,5 @@
     <drawable name="selected">#6633B5E5</drawable>
     <drawable name="like">#009F07</drawable>
     <drawable name="dislike">#FF0000</drawable>
+    <drawable name="grey">#808080</drawable>
 </resources>
