@@ -73,7 +73,11 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 		if (item.equals(login))
 		{
 			if(item.getTitle().equals("Log in"))
-				new LoginFragment().show(getSupportFragmentManager(), "Login");
+			{
+				LoginFragment login = new LoginFragment();
+				login.setLoginRequestListener(this);
+				login.show(getSupportFragmentManager(), "Login");
+			}
 			else
 				new LogoutTask(CLIENT, this).execute();
 		}

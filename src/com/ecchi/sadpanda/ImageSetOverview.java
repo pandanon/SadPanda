@@ -1,6 +1,5 @@
 package com.ecchi.sadpanda;
 
-import util.ImageSetOverviewAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;

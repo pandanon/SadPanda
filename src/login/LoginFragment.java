@@ -12,6 +12,9 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.ecchi.sadpanda.R;
 
 public class LoginFragment extends SherlockDialogFragment {
+	
+	private OnLoginRequestListener mRequestListener;
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder loginBuilder = new Builder(getActivity());
@@ -26,7 +29,8 @@ public class LoginFragment extends SherlockDialogFragment {
 		loginBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {				
-				((OnLoginRequestListener)getActivity()).onLoginRequest(username.getText().toString(), password.getText().toString());				
+				if(mRequestListener != null)
+					mRequestListener.onLoginRequest(username.getText().toString(), password.getText().toString());				
 			}
 		});
 		
@@ -38,5 +42,10 @@ public class LoginFragment extends SherlockDialogFragment {
 		});
 		
 		return loginBuilder.create();
+	}
+	
+	public void setLoginRequestListener(OnLoginRequestListener listener)
+	{
+		mRequestListener = listener;
 	}
 }
