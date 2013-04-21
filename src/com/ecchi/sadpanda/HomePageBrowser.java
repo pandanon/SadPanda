@@ -32,8 +32,9 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 	public static final String URL = "http://exhentai.org/?page=";
 	
 	public static ClientWrapper CLIENT;
+	
 	boolean isLoggedIn = false;
-	MenuItem login;
+	MenuItem login;	
 	
 	boolean mTwoPane = false;
 
@@ -53,31 +54,39 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 			mTwoPane = true;
 		}
 
-		verifyLoggedIn();
+		if(!verifyLoggedIn())
+		{
+			setLoggedOut();
+			login();
+		}
+		else
+		{
+			setLoggedIn();
+			//Load the overview fragment
+			loadFragment();
+		}
 	}
 
 	public boolean isLoggedIn() {
 		return isLoggedIn;
 	}
 	
-	private void verifyLoggedIn()
+	private boolean verifyLoggedIn()
 	{
 		for(Cookie cookie: CLIENT.getCookies().getCookies())
 		{
 			if(cookie.getDomain().equals(Domain))
 			{
-				loginAndLoad();
-				return;
+				return true;
 			}
 		}
+		
+		return false;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if(!isLoggedIn)
-			login = menu.add("Log in");
-		else
-			login = menu.add("Log out");
+		login = menu.add(isLoggedIn? "Log out": "Log in");
 		login.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 		return super.onCreateOptionsMenu(menu);
@@ -87,11 +96,9 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (item.equals(login))
 		{
-			if(item.getTitle().equals("Log in"))
+			if(!isLoggedIn)
 			{
-				LoginFragment login = new LoginFragment();
-				login.setLoginRequestListener(this);
-				login.show(getSupportFragmentManager(), "Login");
+				login();
 			}
 			else
 				new LogoutTask(CLIENT, this).execute();
@@ -99,23 +106,27 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 		return super.onMenuItemSelected(featureId, item);
 	}
 
+	private void login()
+	{
+		LoginFragment login = new LoginFragment();
+		login.setLoginRequestListener(this);
+		login.show(getSupportFragmentManager(), "Login");
+	}
+	
 	@Override
 	public void onLoginFailed() {
-		isLoggedIn = false;
-		login.setTitle("Log in");
+		setLoggedOut();
 		//TODO: display sadpanda
 	}
 
 	@Override
 	public void onLoggedIn() {	
-		login.setTitle("Log out");
-		loginAndLoad();
+		setLoggedIn();
+		loadFragment();
 	}
 	
-	private void loginAndLoad()
-	{
-		isLoggedIn = true;
-		
+	private void loadFragment()
+	{	
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		//remove any fragments that are currently in loading screen.
 		Fragment unneeded = getSupportFragmentManager().findFragmentById(R.id.imageset_list);
@@ -146,8 +157,7 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 
 	@Override
 	public void onLoggedout() {
-		isLoggedIn = false;
-		login.setTitle("Log in");
+		setLoggedOut();
 	}
 
 	@Override
@@ -170,5 +180,19 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 			detailIntent.putExtra(ImageSetDetailFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}		
+	}
+	
+	private void setLoggedIn()
+	{
+		isLoggedIn = true;
+		if(login != null)
+			login.setTitle("Log out");	
+	}
+	
+	private void setLoggedOut()
+	{
+		isLoggedIn = false;
+		if(login != null)
+			login.setTitle("Log in");	
 	}
 }
