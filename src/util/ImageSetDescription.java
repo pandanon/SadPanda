@@ -2,12 +2,15 @@ package util;
 
 import java.util.Date;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Container class for all of sadPanda's image sets. 
  * @author Alex
  *
  */
-public class ImageSetDescription {
+public class ImageSetDescription implements Parcelable{
 
 	private ImageContent setContent;
 	private String setName;
@@ -123,5 +126,44 @@ public class ImageSetDescription {
 			
 			return out;
 		}
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt((int)setContent.ordinal());
+		dest.writeString(setName);		
+		dest.writeString(setThumbUrl);
+		dest.writeLong(setPublished.getTime());
+		dest.writeInt(setScore);
+		dest.writeString(setUploader);
+		dest.writeString(setTorrentUrl);
+	}
+	
+	public static final Parcelable.Creator<ImageSetDescription> CREATOR
+    = new Parcelable.Creator<ImageSetDescription>() {
+	public ImageSetDescription createFromParcel(Parcel in) {
+	    return new ImageSetDescription(in);
+	}
+	
+	public ImageSetDescription[] newArray(int size) {
+	    return new ImageSetDescription[size];
+	}
+	};
+	
+	private ImageSetDescription(Parcel in) {
+		setContent = ImageContent.values()[in.readInt()];
+		setName = in.readString();
+		
+		setThumbUrl = in.readString();
+		setPublished = new Date(in.readLong());
+		setScore = in.readInt();
+		setUploader = in.readString();
+		setTorrentUrl = in.readString();
 	}
 }

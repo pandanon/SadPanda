@@ -20,6 +20,7 @@ import android.view.ViewParent;
 import android.widget.ImageView;
 
 import com.ecchi.sadpanda.HomePageBrowser;
+import com.ecchi.sadpanda.ImageSetOverviewAdapter;
 import com.ecchi.sadpanda.R;
 
 public class ThumbnailLoader {
