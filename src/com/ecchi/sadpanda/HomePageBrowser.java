@@ -25,17 +25,18 @@ import dualpaneoverview.ImageSetDetailActivity;
 import dualpaneoverview.ImageSetDetailFragment;
 
 public class HomePageBrowser extends SherlockFragmentActivity implements
-		OnLoggedinListener, OnLoginRequestListener, OnLoggedoutListener, Callbacks {
+		OnLoggedinListener, OnLoginRequestListener, OnLoggedoutListener,
+		Callbacks {
 
 	private final String UA = "Exhentai Mobile/1.0";
 	public static final String Domain = ".exhentai.org";
 	public static final String URL = "http://exhentai.org/?page=";
-	
+
 	public static ClientWrapper CLIENT;
-	
+
 	boolean isLoggedIn = false;
-	MenuItem login;	
-	
+	MenuItem login;
+
 	boolean mTwoPane = false;
 
 	@Override
@@ -45,7 +46,7 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 		setContentView(R.layout.activity_imageset_list);
 
 		CLIENT = ClientWrapper.newInstance(UA, this);
-		
+
 		if (findViewById(R.id.imageset_detail_container) != null) {
 			// The detail container view will be present only in the
 			// large-screen layouts (res/values-large and
@@ -54,15 +55,12 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 			mTwoPane = true;
 		}
 
-		if(!verifyLoggedIn())
-		{
+		if (!verifyLoggedIn()) {
 			setLoggedOut();
 			login();
-		}
-		else
-		{
+		} else {
 			setLoggedIn();
-			//Load the overview fragment
+			// Load the overview fragment
 			loadFragment();
 		}
 	}
@@ -70,23 +68,20 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 	public boolean isLoggedIn() {
 		return isLoggedIn;
 	}
-	
-	private boolean verifyLoggedIn()
-	{
-		for(Cookie cookie: CLIENT.getCookies().getCookies())
-		{
-			if(cookie.getDomain().equals(Domain))
-			{
+
+	private boolean verifyLoggedIn() {
+		for (Cookie cookie : CLIENT.getCookies().getCookies()) {
+			if (cookie.getDomain().equals(Domain)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		login = menu.add(isLoggedIn? "Log out": "Log in");
+		login = menu.add(isLoggedIn ? "Log out" : "Log in");
 		login.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 
 		return super.onCreateOptionsMenu(menu);
@@ -94,59 +89,55 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		if (item.equals(login))
-		{
-			if(!isLoggedIn)
-			{
+		if (item.equals(login)) {
+			if (!isLoggedIn) {
 				login();
-			}
-			else
+			} else
 				new LogoutTask(CLIENT, this).execute();
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	private void login()
-	{
+	private void login() {
 		LoginFragment login = new LoginFragment();
 		login.setLoginRequestListener(this);
 		login.show(getSupportFragmentManager(), "Login");
 	}
-	
+
 	@Override
 	public void onLoginFailed() {
 		setLoggedOut();
-		//TODO: display sadpanda
+		// TODO: display sadpanda
 	}
 
 	@Override
-	public void onLoggedIn() {	
+	public void onLoggedIn() {
 		setLoggedIn();
 		loadFragment();
 	}
-	
-	private void loadFragment()
-	{	
+
+	private void loadFragment() {
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		//remove any fragments that are currently in loading screen.
-		Fragment unneeded = getSupportFragmentManager().findFragmentById(R.id.imageset_list);
-		if(unneeded != null && !unneeded.isDetached())
-			ft.remove(unneeded);
-		
+		// remove any fragments that are currently in loading screen.
+		Fragment unneeded = getSupportFragmentManager().findFragmentById(
+				R.id.imageset_list);
+		if (unneeded != null && !unneeded.isDetached())
+			ft.detach(unneeded);
+
 		Bundle arguments = new Bundle();
 		arguments.putString("url", URL);
-		
+
 		ImageSetOverview setImageOverview = new ImageSetOverview();
 		setImageOverview.setArguments(arguments);
 		setImageOverview.setCallbackListener(this);
-		if(mTwoPane)
+		if (mTwoPane)
 			setImageOverview.setActivateOnItemClick(true);
-		
+
 		ft.replace(R.id.imageset_list, setImageOverview);
 		ft.commit();
-		
-		//TODO: allow fragment(s) to load
-		//new LoadPandaPageTask(CLIENT).execute(URL);
+
+		// TODO: allow fragment(s) to load
+		// new LoadPandaPageTask(CLIENT).execute(URL);
 	}
 
 	@Override
@@ -166,7 +157,7 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 			// In two-pane mode, show the detail view in this activity by
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
-			Bundle arguments = new Bundle();			
+			Bundle arguments = new Bundle();
 			arguments.putParcelable(ImageSetDetailFragment.ARG_ITEM_ID, id);
 			ImageSetDetailFragment fragment = new ImageSetDetailFragment();
 			fragment.setArguments(arguments);
@@ -179,20 +170,22 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 			Intent detailIntent = new Intent(this, ImageSetDetailActivity.class);
 			detailIntent.putExtra(ImageSetDetailFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
-		}		
+		}
 	}
-	
-	private void setLoggedIn()
-	{
+
+	private void setLoggedIn() {
 		isLoggedIn = true;
-		if(login != null)
-			login.setTitle("Log out");	
+		if (login != null)
+			login.setTitle("Log out");
 	}
-	
-	private void setLoggedOut()
-	{
+
+	private void setLoggedOut() {
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.imageset_list, new SadPandaStubFragment())
+				.commit();
 		isLoggedIn = false;
-		if(login != null)
-			login.setTitle("Log in");	
+		if (login != null)
+			login.setTitle("Log in");
+
 	}
 }
