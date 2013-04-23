@@ -19,10 +19,11 @@ import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.ecchi.sadpanda.ImageSetOverview.Callbacks;
 
 import dualpaneoverview.ImageSetDetailActivity;
 import dualpaneoverview.ImageSetDetailFragment;
+import dualpaneoverview.ImageSetOverview;
+import dualpaneoverview.ImageSetOverview.Callbacks;
 
 public class HomePageBrowser extends SherlockFragmentActivity implements
 		OnLoggedinListener, OnLoginRequestListener, OnLoggedoutListener,
@@ -107,7 +108,6 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 	@Override
 	public void onLoginFailed() {
 		setLoggedOut();
-		// TODO: display sadpanda
 	}
 
 	@Override
@@ -135,9 +135,6 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 
 		ft.replace(R.id.imageset_list, setImageOverview);
 		ft.commit();
-
-		// TODO: allow fragment(s) to load
-		// new LoadPandaPageTask(CLIENT).execute(URL);
 	}
 
 	@Override
