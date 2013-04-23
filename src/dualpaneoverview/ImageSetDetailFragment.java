@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.ecchi.sadpanda.R;
@@ -54,8 +53,8 @@ public class ImageSetDetailFragment extends SherlockFragment {
 
 		// Show the dummy content as text in a TextView.
 		if (mImageSet != null) {
-			((TextView) rootView.findViewById(R.id.imageset_detail))
-					.setText(mImageSet.getSetName());
+			/*((TextView) rootView.findViewById(R.id.imageset_detail))
+					.setText(mImageSet.getSetName());*/
 		}
 
 		return rootView;

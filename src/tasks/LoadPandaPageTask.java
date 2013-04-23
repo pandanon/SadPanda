@@ -23,7 +23,8 @@ import util.ImageSetDescription.ImageContent;
 import android.os.AsyncTask;
 
 import com.ecchi.sadpanda.HomePageBrowser;
-import com.ecchi.sadpanda.ImageSetOverviewAdapter;
+
+import dualpaneoverview.ImageSetOverviewAdapter;
 
 public class LoadPandaPageTask extends
 		AsyncTask<String, ImageSetDescription, List<ImageSetDescription>> {
