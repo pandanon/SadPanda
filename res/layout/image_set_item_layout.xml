@@ -1,71 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="104dp"
-    android:background="@drawable/volume_item_selector"
-    android:orientation="horizontal" >
+    android:layout_height="85dp"
+    android:background="@drawable/volume_item_selector" >
 
     <View
         android:id="@+id/imageContent"
         android:layout_width="5dp"
-        android:layout_height="104dp"
-        android:background="#FFFFFF" />
+        android:layout_height="90dp"
+        android:background="#FFFFFF"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="4dp"/>
 
     <ImageView
         android:id="@+id/setThumb"
-        android:maxWidth="104dp"
         android:layout_width="wrap_content"
-        android:layout_height="104dp"
-        android:padding="4dp"
-        android:scaleType="fitStart" />
+        android:layout_height="85dp"
+        android:contentDescription="@string/thumb_description"
+        android:maxWidth="90dp"
+        android:scaleType="fitStart"
+        android:layout_toRightOf="@+id/imageContent"
+        android:layout_alignParentTop="true" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/setName"
         android:layout_width="wrap_content"
-        android:layout_height="104dp" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/setScore"
+        android:layout_toRightOf="@+id/setThumb"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"
+        android:textColor="#FFFFFF"
+        android:textIsSelectable="false"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/setName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageContent"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:paddingLeft="4dp"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/setScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"
+        android:textIsSelectable="false"
+        android:textSize="18sp" />
 
-        <TextView 
-            android:id="@+id/setUploader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/setName"
-            android:layout_toRightOf="@+id/imageContent"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:padding="4dp"
-            android:textSize="14sp"
-            android:textColor="@drawable/grey"/>
-        
-        <TextView
-            android:id="@+id/setPublished"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/imageContent"
-            android:ellipsize="end"
-            android:padding="4dp"
-            android:singleLine="true"
-            android:textSize="12sp" />
+    <TextView
+        android:id="@+id/setUploader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/setName"
+        android:layout_below="@+id/setName"
+        android:ellipsize="end"
+        android:paddingLeft="8dp"
+        android:singleLine="true"
+        android:textColor="@drawable/grey"
+        android:textIsSelectable="false"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/setScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:padding="2dp"
-            android:textSize="18sp" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/setPublished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="4dp"
+        android:paddingRight="4dp"
+        android:textIsSelectable="false"
+        android:textSize="12sp" />
 
-</LinearLayout>
+</RelativeLayout>

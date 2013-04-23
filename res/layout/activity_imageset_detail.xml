@@ -3,5 +3,4 @@
     android:id="@+id/imageset_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ImageSetDetailActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:context=".ImageSetDetailActivity" />
