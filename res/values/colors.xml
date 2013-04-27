@@ -2,4 +2,6 @@
 <resources>
     <drawable name="selected">#6633B5E5</drawable>
     <drawable name="grey">#808080</drawable>
+    
+    <drawable name="divider_color">#FFFFFFFF</drawable>
 </resources>

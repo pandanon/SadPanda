@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Standard orientation constant. -->
+    <attr name="orientation">
+
+        <!-- Defines an horizontal widget. -->
+        <enum name="horizontal" value="0" />
+        <!-- Defines a vertical widget. -->
+        <enum name="vertical" value="1" />
+    </attr>
+
+    <declare-styleable name="SlidingDrawer">
+
+        <!-- Identifier for the child that represents the drawer's handle. -->
+        <attr name="handle" format="reference" />
+        <!-- Identifier for the child that represents the drawer's content. -->        
+        <attr name="content" format="reference" />
+        <!-- Identifier for the view that displays the main content -->
+        <attr name="main_content" format="reference" />
+        <!-- Orientation of the SlidingDrawer. -->
+        <attr name="orientation" />
+        <!-- Extra offset for the handle at the bottom of the SlidingDrawer. -->
+        <attr name="bottomOffset" format="dimension" />
+        <!-- Extra offset for the handle at the top of the SlidingDrawer. -->
+        <attr name="topOffset" format="dimension" />
+    </declare-styleable>
+
+</resources>

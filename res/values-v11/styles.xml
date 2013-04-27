@@ -2,7 +2,7 @@
 
     <!--
         Base application theme for API 11+. This theme completely replaces
-        AppBaseTheme from res/values/styles.xml on API 11+ devices.
+        AppBaseTheme from res/values/styles.xml on API 11+ devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <!-- API 11 theme customizations can go here. -->
@@ -12,16 +12,4 @@
         <item name="android:divider">?android:attr/dividerHorizontal</item>
     </style>
 
-    <!-- This is our main ActionBarSherlock theme -->
-        <style name="Theme.Styled" parent="Theme.Sherlock.Light.DarkActionBar">
-            <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
-            <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
-        </style>
-    
-         <!-- "Implementation" of our ABS custom theme -->
-        <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
-            <item name="titleTextStyle">@style/TitleText</item>
-            <item name="android:titleTextStyle">@style/TitleText</item>
-        </style>
-        
 </resources>

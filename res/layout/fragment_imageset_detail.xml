@@ -1,19 +1,68 @@
-<com.actionbarsherlock.internal.widget.IcsLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.ecchi.sadpanda"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:dividerPadding="4dp"
-    android:scrollbars="vertical"
-    android:showDividers="middle" >
+    android:orientation="vertical" >
 
-    <include
+    <com.actionbarsherlock.internal.widget.IcsLinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        layout="@layout/detail_image_set_description" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/drawer"
+        android:dividerPadding="4dp"
+        android:orientation="vertical"
+        android:showDividers="middle" >
 
-    <include
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            layout="@layout/detail_image_set_description" />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            layout="@layout/detail_image_set_thumb" />
+    </com.actionbarsherlock.internal.widget.IcsLinearLayout>
+
+    <widget.SlidingDrawer
+        android:id="@+id/drawer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        layout="@layout/detail_image_set_thumb" />
+        android:layout_height="match_parent"
+        app:content="@+id/comments"
+        app:handle="@+id/handle"
+        app:orientation="vertical" >
 
-</com.actionbarsherlock.internal.widget.IcsLinearLayout>
+        <LinearLayout
+            android:id="@+id/handle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_color"
+                android:padding="4dp"/>
+
+            <TextView
+                android:id="@+id/handle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comments_handle" 
+                android:padding="8dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/divider_color"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/comments"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </widget.SlidingDrawer>
+
+</RelativeLayout>

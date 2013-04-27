@@ -1,10 +1,12 @@
 package dualpaneoverview;
 
 import util.ImageSetDescription;
+import widget.SlidingDrawer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.ecchi.sadpanda.R;
@@ -51,10 +53,17 @@ public class ImageSetDetailFragment extends SherlockFragment {
 		View rootView = inflater.inflate(R.layout.fragment_imageset_detail,
 				container, false);
 
+		SlidingDrawer drawer = (SlidingDrawer)rootView.findViewById(R.id.drawer);
+		View content = rootView.findViewById(R.id.content);
+		
+		drawer.setOnDrawerScrollListener(drawer.new DrawerContentAnimator(
+				AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_main),
+				AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_main),
+				content));
+		
 		// Show the dummy content as text in a TextView.
 		if (mImageSet != null) {
-			/*((TextView) rootView.findViewById(R.id.imageset_detail))
-					.setText(mImageSet.getSetName());*/
+			
 		}
 
 		return rootView;
