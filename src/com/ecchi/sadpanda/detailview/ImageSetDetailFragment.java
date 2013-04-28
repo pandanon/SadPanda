@@ -1,15 +1,13 @@
-package dualpaneoverview;
+package com.ecchi.sadpanda.detailview;
 
-import util.ImageSetDescription;
-import widget.SlidingDrawer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.ecchi.sadpanda.R;
+import com.ecchi.sadpanda.util.ImageSetDescription;
 
 /**
  * A fragment representing a single ImageSet detail screen. This fragment is
@@ -52,14 +50,6 @@ public class ImageSetDetailFragment extends SherlockFragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_imageset_detail,
 				container, false);
-
-		SlidingDrawer drawer = (SlidingDrawer)rootView.findViewById(R.id.drawer);
-		View content = rootView.findViewById(R.id.content);
-		
-		drawer.setOnDrawerScrollListener(drawer.new DrawerContentAnimator(
-				AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_main),
-				AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_main),
-				content));
 		
 		// Show the dummy content as text in a TextView.
 		if (mImageSet != null) {

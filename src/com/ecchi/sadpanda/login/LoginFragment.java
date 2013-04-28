@@ -1,4 +1,4 @@
-package login;
+package com.ecchi.sadpanda.login;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;

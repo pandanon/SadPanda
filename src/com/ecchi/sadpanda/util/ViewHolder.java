@@ -1,4 +1,4 @@
-package util;
+package com.ecchi.sadpanda.util;
 
 import android.util.SparseArray;
 import android.view.View;

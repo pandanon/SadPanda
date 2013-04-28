@@ -1,4 +1,4 @@
-package login;
+package com.ecchi.sadpanda.login;
 
 
 public interface OnLoggedinListener {

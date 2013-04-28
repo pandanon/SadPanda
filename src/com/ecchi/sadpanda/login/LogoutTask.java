@@ -1,11 +1,12 @@
-package login;
+package com.ecchi.sadpanda.login;
 
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 
-import util.ClientWrapper;
+import com.ecchi.sadpanda.util.ClientWrapper;
+
 import android.os.AsyncTask;
 
 public class LogoutTask extends AsyncTask<Void, Void, Void> {

@@ -1,4 +1,4 @@
-package util;
+package com.ecchi.sadpanda.util;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;

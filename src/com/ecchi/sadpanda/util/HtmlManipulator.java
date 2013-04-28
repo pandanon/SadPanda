@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package util;
+package com.ecchi.sadpanda.util;
 
 import java.util.HashMap;
 import java.util.Map;

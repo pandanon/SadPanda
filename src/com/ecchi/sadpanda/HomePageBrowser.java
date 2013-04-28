@@ -1,16 +1,8 @@
 package com.ecchi.sadpanda;
 
-import login.LoginFragment;
-import login.LoginTask;
-import login.LogoutTask;
-import login.OnLoggedinListener;
-import login.OnLoggedoutListener;
-import login.OnLoginRequestListener;
 
 import org.apache.http.cookie.Cookie;
 
-import util.ClientWrapper;
-import util.ImageSetDescription;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,11 +11,19 @@ import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.ecchi.sadpanda.detailview.ImageSetDetailActivity;
+import com.ecchi.sadpanda.detailview.ImageSetDetailFragment;
+import com.ecchi.sadpanda.login.LoginFragment;
+import com.ecchi.sadpanda.login.LoginTask;
+import com.ecchi.sadpanda.login.LogoutTask;
+import com.ecchi.sadpanda.login.OnLoggedinListener;
+import com.ecchi.sadpanda.login.OnLoggedoutListener;
+import com.ecchi.sadpanda.login.OnLoginRequestListener;
+import com.ecchi.sadpanda.overview.ImageSetOverview;
+import com.ecchi.sadpanda.overview.ImageSetOverview.Callbacks;
+import com.ecchi.sadpanda.util.ClientWrapper;
+import com.ecchi.sadpanda.util.ImageSetDescription;
 
-import dualpaneoverview.ImageSetDetailActivity;
-import dualpaneoverview.ImageSetDetailFragment;
-import dualpaneoverview.ImageSetOverview;
-import dualpaneoverview.ImageSetOverview.Callbacks;
 
 public class HomePageBrowser extends SherlockFragmentActivity implements
 		OnLoggedinListener, OnLoginRequestListener, OnLoggedoutListener,

@@ -1,4 +1,4 @@
-package util;
+package com.ecchi.sadpanda.util;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package util;
+package com.ecchi.sadpanda.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

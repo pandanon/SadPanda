@@ -1,4 +1,4 @@
-package login;
+package com.ecchi.sadpanda.login;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,8 @@ import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 
-import util.ClientWrapper;
+import com.ecchi.sadpanda.util.ClientWrapper;
+
 import android.os.AsyncTask;
 
 public class LoginTask extends AsyncTask<String, Void, HttpResponse> {

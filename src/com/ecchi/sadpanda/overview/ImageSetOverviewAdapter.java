@@ -1,16 +1,10 @@
-package dualpaneoverview;
+package com.ecchi.sadpanda.overview;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.ocpsoft.pretty.time.PrettyTime;
 
-import tasks.LoadPandaPageTask;
-import util.BitmapLoader;
-import util.ImageSetDescription;
-import util.ImageSetDescription.ImageContent;
-import util.PagedScrollAdapter;
-import util.ViewHolder;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
@@ -21,6 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecchi.sadpanda.R;
+import com.ecchi.sadpanda.tasks.LoadPandaPageTask;
+import com.ecchi.sadpanda.util.BitmapLoader;
+import com.ecchi.sadpanda.util.ImageSetDescription;
+import com.ecchi.sadpanda.util.PagedScrollAdapter;
+import com.ecchi.sadpanda.util.ViewHolder;
+import com.ecchi.sadpanda.util.ImageSetDescription.ImageContent;
 
 public class ImageSetOverviewAdapter extends PagedScrollAdapter {
 

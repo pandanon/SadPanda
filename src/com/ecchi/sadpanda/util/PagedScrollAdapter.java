@@ -1,4 +1,4 @@
-package util;
+package com.ecchi.sadpanda.util;
 
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;

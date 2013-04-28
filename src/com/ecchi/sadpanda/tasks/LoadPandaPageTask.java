@@ -1,4 +1,4 @@
-package tasks;
+package com.ecchi.sadpanda.tasks;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -16,15 +16,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 
-import util.ClientWrapper;
-import util.HtmlManipulator;
-import util.ImageSetDescription;
-import util.ImageSetDescription.ImageContent;
 import android.os.AsyncTask;
 
 import com.ecchi.sadpanda.HomePageBrowser;
+import com.ecchi.sadpanda.overview.ImageSetOverviewAdapter;
+import com.ecchi.sadpanda.util.ClientWrapper;
+import com.ecchi.sadpanda.util.HtmlManipulator;
+import com.ecchi.sadpanda.util.ImageSetDescription;
+import com.ecchi.sadpanda.util.ImageSetDescription.ImageContent;
 
-import dualpaneoverview.ImageSetOverviewAdapter;
 
 public class LoadPandaPageTask extends
 		AsyncTask<String, ImageSetDescription, List<ImageSetDescription>> {
@@ -132,8 +132,7 @@ public class LoadPandaPageTask extends
 			} else {
 				idxStart = tempIdxStart;
 				idxEnd = imageSet[i].indexOf("\"", idxStart);
-				setThumbUrl = imageSet[i].substring(idxStart, idxEnd);
-				
+				setThumbUrl = imageSet[i].substring(idxStart, idxEnd);				
 			}
 
 			// torrent url
@@ -147,11 +146,15 @@ public class LoadPandaPageTask extends
 				setTorrentUrl = imageSet[i].substring(idxStart, idxEnd);
 
 				// make ready for name lookup
-				token = "href";
+				token = "href=\"";
 				idxStart = imageSet[i].indexOf(token, idxStart)
 						+ token.length();
 			}
 
+			// set url
+			idxEnd = imageSet[i].indexOf("\"", idxStart);
+			String setUrl = imageSet[i].substring(idxStart, idxEnd);
+			
 			// name
 			token = ">";
 			idxStart = imageSet[i].indexOf(token, idxStart) + token.length();
@@ -175,7 +178,7 @@ public class LoadPandaPageTask extends
 
 			imageSets.add(new ImageSetDescription(setContent, setName,
 					setThumbUrl, setPublished, score, setUploader,
-					setTorrentUrl));
+					setTorrentUrl,setUrl));
 		}
 
 		return imageSets;

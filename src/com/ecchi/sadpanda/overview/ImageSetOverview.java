@@ -1,6 +1,5 @@
-package dualpaneoverview;
+package com.ecchi.sadpanda.overview;
 
-import util.ImageSetDescription;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,6 +13,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.ecchi.sadpanda.util.ImageSetDescription;
 
 public class ImageSetOverview extends SherlockFragment {
 
