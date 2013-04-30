@@ -68,5 +68,9 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetThumb> {
 		super.addPage(dataSet);
 		currentPage++;
 	}
-
+	
+	public ImageLoader getImageLoader()
+	{
+		return mImageLoader;
+	}
 }

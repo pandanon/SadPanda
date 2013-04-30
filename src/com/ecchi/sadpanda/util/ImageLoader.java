@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import com.ecchi.sadpanda.HomePageBrowser;
 
 public class ImageLoader {
+	private static final int thumbWidth = 100;
+	
 	final String mDiskCacheName = "Images";
 	final int mDiskCacheSize = 1024 * 1024 * 50; // 50MB
 
@@ -177,6 +179,10 @@ public class ImageLoader {
 		Bitmap temp = getBitmapFromURL(url);		
 				
 		Bitmap bitmap = null;
+		
+		if(temp == null)
+			return null;
+		
 		if(downSample)
 		{
 			bitmap = Bitmap.createScaledBitmap(temp, reqWidth, reqWidth, true);
@@ -191,6 +197,48 @@ public class ImageLoader {
 		mDiskCache.put(url.hashCode(), bitmap);
 		
 		return bitmap;
+	}
+	
+	public synchronized void cutBitmapToDisk(String url)
+	{
+		InputStream is = null;
+		Bitmap bitmap = null;
+		HttpURLConnection conn = null;
+		try {
+			HttpGet imageGet = new HttpGet(url);
+			HttpResponse response = HomePageBrowser.CLIENT.getClient()
+					.execute(imageGet, HomePageBrowser.CLIENT.getContext());
+			
+			is = response.getEntity().getContent();
+			
+			bitmap = BitmapFactory.decodeStream(is);
+			
+		} catch (Throwable ex) {
+			ex.printStackTrace();			
+		} finally {
+			// cleaning up resources
+			if (is != null)
+				try {
+					is.close();
+				} catch (IOException e) {
+					// Welp, we've tried everything we could
+					e.printStackTrace();
+				}
+
+			if (conn != null)
+				conn.disconnect();
+		}	
+		
+		int offset = 0;
+		int i = 0;
+		while(offset < bitmap.getWidth())
+		{
+			String thumbUrl = url + "-" + i++;
+			Bitmap thumb = Bitmap.createBitmap(bitmap, offset, 0, thumbWidth, bitmap.getHeight(), null, false);
+			mDiskCache.put(thumbUrl.hashCode(), thumb);
+			thumb.recycle();
+			offset += thumbWidth;
+		}
 	}
 	
 	class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
@@ -251,24 +299,4 @@ public class ImageLoader {
 			return bitmapWorkerTaskReference.get();
 		}
 	}
-	
-	public class AsyncPrefetchTask extends AsyncTask<Void, Void, Void>
-	{
-		List<ImageSetDescription> imageList;
-		
-		public AsyncPrefetchTask(List<ImageSetDescription> imageList) {
-			this.imageList = imageList;
-		}
-		
-		@Override
-		protected Void doInBackground(Void... params) {
-			for(ImageSetDescription imageSet : imageList)
-			{
-				putBitmapInDisk(imageSet.getSetThumbUrl(), downSample, bitmapWidth, bitmapHeight);
-			}
-			
-			return null;
-		}
-	}
-
 }
