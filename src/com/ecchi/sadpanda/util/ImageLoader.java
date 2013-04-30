@@ -22,7 +22,7 @@ import android.widget.ImageView;
 
 import com.ecchi.sadpanda.HomePageBrowser;
 
-public class BitmapLoader {
+public class ImageLoader {
 	final String mDiskCacheName = "Images";
 	final int mDiskCacheSize = 1024 * 1024 * 50; // 50MB
 
@@ -40,7 +40,7 @@ public class BitmapLoader {
 	 * @param bitmapHeight requested size for the height
 	 * @param bitmapWidth requested size for the width
 	 */
-	public BitmapLoader(Context context, boolean downSample, int bitmapHeight, int bitmapWidth)
+	public ImageLoader(Context context, boolean downSample, int bitmapHeight, int bitmapWidth)
 	{
 		this.downSample = downSample;
 		
@@ -50,7 +50,7 @@ public class BitmapLoader {
 		createCache(context);
 	}
 	
-	public BitmapLoader(Context context) {
+	public ImageLoader(Context context) {
 		this.downSample = false;
 		
 		this.bitmapHeight = 0;
@@ -77,6 +77,12 @@ public class BitmapLoader {
 		mDiskCache = new DiskLruImageCache(context, "", mDiskCacheSize,
 				CompressFormat.JPEG, 100);
 	}
+	
+	public void clearCache()
+	{
+		mDiskCache.clearCache();
+		mMemoryCache.evictAll();
+	}
 
 	public void loadBitmap(String url, ImageView imageView) {
 		// always cancel possible previous tasks, or bad things will happen
@@ -88,7 +94,7 @@ public class BitmapLoader {
 			} else {
 				final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
 				final AsyncDrawable asyncDrawable = new AsyncDrawable(
-						imageView.getResources(), null, task);
+						imageView.getResources(), null, task);				
 				imageView.setImageDrawable(asyncDrawable);
 				task.execute(url);
 			}

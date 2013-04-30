@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.ecchi.sadpanda.R;
@@ -50,12 +52,37 @@ public class ImageSetDetailFragment extends SherlockFragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_imageset_detail,
 				container, false);
-		
+
 		// Show the dummy content as text in a TextView.
 		if (mImageSet != null) {
-			
+			TextView name = (TextView) rootView.findViewById(R.id.set_name);
+			name.setText(mImageSet.getSetName());
+
+			TextView uploader = (TextView) rootView
+					.findViewById(R.id.set_uploader);
+			uploader.setText(mImageSet.getSetUploader());
 		}
 
 		return rootView;
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+
+		if (mImageSet != null) {
+			GridView thumbView = (GridView) view.findViewById(R.id.thumb_view);
+			String baseUrl = mImageSet.getSetUrl() + "?p=";
+			ImageSetDetailAdapter adapter = new ImageSetDetailAdapter(baseUrl, this
+					.getActivity());
+			thumbView.setAdapter(adapter);
+			thumbView.setOnScrollListener(adapter);
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
 	}
 }

@@ -1,6 +1,5 @@
 package com.ecchi.sadpanda.overview;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.ocpsoft.pretty.time.PrettyTime;
@@ -15,41 +14,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ecchi.sadpanda.R;
-import com.ecchi.sadpanda.tasks.LoadPandaPageTask;
-import com.ecchi.sadpanda.util.BitmapLoader;
+import com.ecchi.sadpanda.tasks.LoadOverviewPageTask;
+import com.ecchi.sadpanda.util.ImageLoader;
 import com.ecchi.sadpanda.util.ImageSetDescription;
+import com.ecchi.sadpanda.util.ImageSetDescription.ImageContent;
 import com.ecchi.sadpanda.util.PagedScrollAdapter;
 import com.ecchi.sadpanda.util.ViewHolder;
-import com.ecchi.sadpanda.util.ImageSetDescription.ImageContent;
 
-public class ImageSetOverviewAdapter extends PagedScrollAdapter {
+public class ImageSetOverviewAdapter extends PagedScrollAdapter<ImageSetDescription> {
 
-	List<ImageSetDescription> setImageList;
 	int currentPage = 0;
 	String baseUrl;
 	PrettyTime timeFormat;
-	BitmapLoader bitmapLoader;
+	ImageLoader bitmapLoader;
 
 	public ImageSetOverviewAdapter(String baseUrl, Activity activity) {
-		setImageList = new ArrayList<ImageSetDescription>();
 		timeFormat = new PrettyTime();
 		this.baseUrl = baseUrl;
-		bitmapLoader = new BitmapLoader(activity, true, 1, 100);
+		bitmapLoader = new ImageLoader(activity, true, 1, 100);
 		// this.columnwidth = columnwidth;
 	}
-
-	@Override
-	public int getCount() {
-		// TODO Auto-generated method stub
-		return setImageList.size();
-	}
-
-	@Override
-	public ImageSetDescription getItem(int position) {
-		// TODO Auto-generated method stub
-		return setImageList.get(position);
-	}
-
+	
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
@@ -68,7 +53,7 @@ public class ImageSetOverviewAdapter extends PagedScrollAdapter {
 
 		ImageSetDescription description = getItem(position);
 
-		if (convertView == null) {			
+		if (convertView == null) {
 			convertView = ((LayoutInflater) parent.getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 					.inflate(R.layout.image_set_item_layout, parent, false);
@@ -84,7 +69,7 @@ public class ImageSetOverviewAdapter extends PagedScrollAdapter {
 		// set uploader
 		TextView uploader = ViewHolder.get(convertView, R.id.setUploader);
 		uploader.setText(description.getSetUploader());
-	
+
 		// set date published
 		TextView published = ViewHolder.get(convertView, R.id.setPublished);
 		if (description.getSetPublished() == null)
@@ -104,21 +89,18 @@ public class ImageSetOverviewAdapter extends PagedScrollAdapter {
 				.fromHtml("\n<sup><b><font color=\"white\"><small><small>"
 						+ description.getSetScore()
 						+ "</small></small></font></b></sup><small>/</small><sub><small><small>10</small></small></sub>\n"));
-		
+
 		return convertView;
 	}
 
 	@Override
 	public void loadNewDataSet() {
-		new LoadPandaPageTask(this).execute(baseUrl + currentPage);
+		new LoadOverviewPageTask(this).execute(baseUrl + currentPage);
 	}
-
-	public void addItems(List<ImageSetDescription> newImages) {
-		setImageList.addAll(newImages);
+	
+	@Override
+	public void addPage(List<ImageSetDescription> dataSet) {
+		super.addPage(dataSet);
 		currentPage++;
-		notifyDataSetChanged();
-		
-		//bitmapLoader.new AsyncPrefetchTask(newImages).execute();		
 	}
-
 }

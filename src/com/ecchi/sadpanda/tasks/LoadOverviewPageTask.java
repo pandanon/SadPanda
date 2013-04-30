@@ -1,86 +1,26 @@
 package com.ecchi.sadpanda.tasks;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.zip.GZIPInputStream;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-
-import android.os.AsyncTask;
-
-import com.ecchi.sadpanda.HomePageBrowser;
-import com.ecchi.sadpanda.overview.ImageSetOverviewAdapter;
-import com.ecchi.sadpanda.util.ClientWrapper;
-import com.ecchi.sadpanda.util.HtmlManipulator;
 import com.ecchi.sadpanda.util.ImageSetDescription;
 import com.ecchi.sadpanda.util.ImageSetDescription.ImageContent;
+import com.ecchi.sadpanda.util.PagedScrollAdapter;
 
+public class LoadOverviewPageTask extends LoadPageTask<ImageSetDescription> {
 
-public class LoadPandaPageTask extends
-		AsyncTask<String, ImageSetDescription, List<ImageSetDescription>> {
-
-	ClientWrapper client;
-	ImageSetOverviewAdapter adapter;
-
-	public LoadPandaPageTask(ImageSetOverviewAdapter adapter) {
-		this.client = HomePageBrowser.CLIENT;
-		this.adapter = adapter;
+	public LoadOverviewPageTask(
+			PagedScrollAdapter<ImageSetDescription> pageAdapter) {
+		super(pageAdapter);
 	}
 
 	@Override
-	protected List<ImageSetDescription> doInBackground(String... arg0) {
-
-		HttpGet httpget = new HttpGet(arg0[0]);
-		httpget.addHeader("Accept-charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3");
-		httpget.addHeader("Accept-encoding", "gzip,deflate,sdch");
-		String resString = null;
-
-		try {
-			HttpResponse response = client.getClient().execute(httpget,
-					client.getContext());
-
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) {
-			}
-
-			HttpEntity entity = response.getEntity();
-			InputStream is = entity.getContent();
-
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					new GZIPInputStream(is), "UTF-8"), 8);
-
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-
-			while ((line = reader.readLine()) != null)
-			{
-				sb.append(line);
-			}
-
-			resString = sb.toString();
-
-			is.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			cancel(true);
-			return null;
-		}
-
-		return parseHtml(HtmlManipulator.replaceHtmlEntities(resString));
-	}
-
-	private List<ImageSetDescription> parseHtml(String html) {
-		if (!(html != null && html.length() > 0))
+	protected List<ImageSetDescription> parseHtmlContent(String content) {
+		if (!(content != null && content.length() > 0))
 			return null;
 
 		List<ImageSetDescription> imageSets = new ArrayList<ImageSetDescription>();
@@ -88,7 +28,7 @@ public class LoadPandaPageTask extends
 		SimpleDateFormat commentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm",
 				Locale.ENGLISH);
 
-		String[] imageSet = html.split("class=\"gtr");
+		String[] imageSet = content.split("class=\"gtr");
 
 		for (int i = 1; i < imageSet.length; i++) {
 			int idxStart = -1;
@@ -121,18 +61,21 @@ public class LoadPandaPageTask extends
 					+ token.length();
 			String setThumbUrl = null;
 			int tempIdxEnd = imageSet[i].indexOf("</div>", idxStart);
-			
+
 			if (tempIdxStart > tempIdxEnd || tempIdxStart == token.length() - 1) {
 				token = "~";
-				int temp2IdxStart = imageSet[i].indexOf(token, idxStart) + token.length();
-				int temp3IdxStart = imageSet[i].indexOf(token, temp2IdxStart) + token.length();
+				int temp2IdxStart = imageSet[i].indexOf(token, idxStart)
+						+ token.length();
+				int temp3IdxStart = imageSet[i].indexOf(token, temp2IdxStart)
+						+ token.length();
 				tempIdxEnd = imageSet[i].indexOf("~", temp3IdxStart);
-				String tempThumbUrl = imageSet[i].substring(temp2IdxStart, tempIdxEnd);
+				String tempThumbUrl = imageSet[i].substring(temp2IdxStart,
+						tempIdxEnd);
 				setThumbUrl = "http://" + tempThumbUrl.replace("~", "/");
 			} else {
 				idxStart = tempIdxStart;
 				idxEnd = imageSet[i].indexOf("\"", idxStart);
-				setThumbUrl = imageSet[i].substring(idxStart, idxEnd);				
+				setThumbUrl = imageSet[i].substring(idxStart, idxEnd);
 			}
 
 			// torrent url
@@ -154,7 +97,7 @@ public class LoadPandaPageTask extends
 			// set url
 			idxEnd = imageSet[i].indexOf("\"", idxStart);
 			String setUrl = imageSet[i].substring(idxStart, idxEnd);
-			
+
 			// name
 			token = ">";
 			idxStart = imageSet[i].indexOf(token, idxStart) + token.length();
@@ -178,21 +121,10 @@ public class LoadPandaPageTask extends
 
 			imageSets.add(new ImageSetDescription(setContent, setName,
 					setThumbUrl, setPublished, score, setUploader,
-					setTorrentUrl,setUrl));
+					setTorrentUrl, setUrl));
 		}
 
 		return imageSets;
-	}
-
-	@Override
-	protected void onPostExecute(List<ImageSetDescription> result) {
-		// TODO Auto-generated method stub
-		super.onPostExecute(result);
-
-		if (!(result != null && result.size() > 0))
-			return;
-
-		adapter.addItems(result);
 	}
 
 }
