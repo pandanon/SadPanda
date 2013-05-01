@@ -77,6 +77,8 @@ public class ImageSetDetailFragment extends SherlockFragment {
 					.getActivity());
 			thumbView.setAdapter(adapter);
 			thumbView.setOnScrollListener(adapter);
+			
+			thumbView.setEmptyView(view.findViewById(R.id.empty));
 		}
 	}
 
