@@ -172,7 +172,7 @@ public class ImageSetDescription implements Parcelable {
 		}
 	};
 
-	private ImageSetDescription(Parcel in) {
+	protected ImageSetDescription(Parcel in) {
 		setContent = ImageContent.values()[in.readInt()];
 		setName = in.readString();
 
