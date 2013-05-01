@@ -24,6 +24,7 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetThumb> {
 
 		for (int i = 0; i < thumbsContent.length; i++) {
 			String url;
+			int height = -1;
 
 			int startIdx = thumbsContent[i].indexOf("url(") + 4;
 			if (startIdx == 3) {
@@ -33,6 +34,11 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetThumb> {
 			} else {
 				int endIdx = thumbsContent[i].indexOf(")", startIdx);
 				url = thumbsContent[i].substring(startIdx, endIdx);
+
+				startIdx = thumbsContent[i].indexOf(" height:") + 8;
+				endIdx = thumbsContent[i].indexOf("px;", startIdx);
+				height = Integer.parseInt(thumbsContent[i].substring(startIdx,
+						endIdx));
 
 				// easier to cut combined thumbs into pieces and write to file
 				// than to translate the imageviews
@@ -44,7 +50,7 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetThumb> {
 				url += "-" + i;
 			}
 
-			thumbUrls.add(new ImageSetThumb(url, null));
+			thumbUrls.add(new ImageSetThumb(url, height));
 		}
 
 		return thumbUrls;

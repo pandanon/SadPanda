@@ -3,13 +3,18 @@ package com.ecchi.sadpanda.detailview;
 import java.util.List;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView.LayoutParams;
-import android.widget.ImageView;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
+import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.tasks.LoadDetailDescriptionPageTask;
 import com.ecchi.sadpanda.tasks.LoadDetailPageTask;
+import com.ecchi.sadpanda.util.CroppedImageView;
 import com.ecchi.sadpanda.util.ImageLoader;
 import com.ecchi.sadpanda.util.ImageSetDetailDescription;
 import com.ecchi.sadpanda.util.ImageSetThumb;
@@ -19,6 +24,7 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetThumb> {
 
 	int currentPage = 0;
 	int totalPages = 1;
+	public static final int PADDING = 5;
 
 	ImageSetDetailDescription mDescription;
 
@@ -34,15 +40,25 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetThumb> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null)
-			convertView = new ImageView(parent.getContext());
+			convertView = View.inflate(parent.getContext(), R.layout.thumb_view_item, null);
 
-		// make sure the size of the view is the same as the thumb.
-		convertView.setLayoutParams(new LayoutParams(100, 144));
+		convertView.setLayoutParams( new GridView.LayoutParams(100, 164));
+		ImageSetThumb item = getItem(position);	
+		
+		CroppedImageView thumb = (CroppedImageView)convertView.findViewById(R.id.thumb);
+		// if the height has been predefined on the page, use it.
+		int height = item.getHeight();
+		
+		if(height == -1)
+			height = 144;
+		
+		thumb.setLayoutParams(new LinearLayout.LayoutParams(100, height));
 
-		ImageSetThumb item = getItem(position);
+		mImageLoader.loadBitmap(item.getThumbUrl(), thumb);
 
-		mImageLoader.loadBitmap(item.getThumbUrl(), (ImageView) convertView);
-
+		TextView thumbText = (TextView)convertView.findViewById(R.id.thumb_text);
+		thumbText.setText(String.valueOf(position));
+		
 		return convertView;
 	}
 
