@@ -38,11 +38,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/description_container"
-        android:columnWidth="100dp"
+        android:columnWidth="100dp"        
         android:numColumns="auto_fit"
-        android:verticalSpacing="5dp" />
-    
-    
+        android:verticalSpacing="4dp" />
+
     <ProgressBar
         android:id="@+id/empty"
         android:layout_width="80dp"
