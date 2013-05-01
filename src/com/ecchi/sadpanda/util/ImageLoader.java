@@ -234,7 +234,8 @@ public class ImageLoader {
 		while(offset < bitmap.getWidth())
 		{
 			String thumbUrl = url + "-" + i++;
-			Bitmap thumb = Bitmap.createBitmap(bitmap, offset, 0, thumbWidth, bitmap.getHeight(), null, false);
+			//Some combined images are smaller than needed, check for that.
+			Bitmap thumb = Bitmap.createBitmap(bitmap, offset, 0, Math.min(thumbWidth, bitmap.getWidth() - offset), bitmap.getHeight(), null, false);
 			mDiskCache.put(thumbUrl.hashCode(), thumb);
 			thumb.recycle();
 			offset += thumbWidth;
