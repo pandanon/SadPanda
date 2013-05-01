@@ -1,21 +1,20 @@
 package com.ecchi.sadpanda.util;
 
-import android.graphics.Matrix;
 
 public class ImageSetThumb {
-	String thumbUrl;
-	Matrix drawableMatrix;
+	String mThumbUrl;
+	int mHeight;
 	
-	public ImageSetThumb(String url, Matrix translation) {
-		thumbUrl = url;
-		drawableMatrix = translation;
+	public ImageSetThumb(String url, int height) {
+		mThumbUrl = url;
+		mHeight = height;
 	}
 	
-	public Matrix getDrawableMatrix() {
-		return drawableMatrix;
+	public int getHeight() {
+		return mHeight;
 	}
 	
 	public String getThumbUrl() {
-		return thumbUrl;
+		return mThumbUrl;
 	}
 }
