@@ -81,10 +81,4 @@ public class ImageSetDetailFragment extends SherlockFragment {
 			thumbView.setEmptyView(view.findViewById(R.id.empty));
 		}
 	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		
-	}
 }

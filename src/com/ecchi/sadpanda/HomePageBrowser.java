@@ -130,6 +130,7 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 		ImageSetOverview setImageOverview = new ImageSetOverview();
 		setImageOverview.setArguments(arguments);
 		setImageOverview.setCallbackListener(this);
+		setImageOverview.setHasOptionsMenu(true);
 		if (mTwoPane)
 			setImageOverview.setActivateOnItemClick(true);
 

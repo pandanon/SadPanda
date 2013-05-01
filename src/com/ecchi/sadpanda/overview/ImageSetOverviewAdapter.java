@@ -1,7 +1,5 @@
 package com.ecchi.sadpanda.overview;
 
-import java.util.List;
-
 import org.ocpsoft.pretty.time.PrettyTime;
 
 import android.app.Activity;
@@ -23,7 +21,6 @@ import com.ecchi.sadpanda.util.ViewHolder;
 
 public class ImageSetOverviewAdapter extends PagedScrollAdapter<ImageSetDescription> {
 
-	int currentPage = 0;
 	String baseUrl;
 	PrettyTime timeFormat;
 	ImageLoader bitmapLoader;
@@ -95,12 +92,6 @@ public class ImageSetOverviewAdapter extends PagedScrollAdapter<ImageSetDescript
 
 	@Override
 	public void loadNewDataSet() {
-		new LoadOverviewPageTask(this).execute(baseUrl + currentPage);
-	}
-	
-	@Override
-	public void addPage(List<ImageSetDescription> dataSet) {
-		super.addPage(dataSet);
-		currentPage++;
+		new LoadOverviewPageTask(this).execute(baseUrl + getCurrentPage());
 	}
 }

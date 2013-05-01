@@ -13,6 +13,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.util.ImageSetDescription;
 
 public class ImageSetOverview extends SherlockFragment {
@@ -58,6 +62,7 @@ public class ImageSetOverview extends SherlockFragment {
 
 	ListView mImageSetView;
 	ImageSetOverviewAdapter mImageSetAdapter;
+	boolean activateOnItemClick;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -91,6 +96,8 @@ public class ImageSetOverview extends SherlockFragment {
 					.getInt(STATE_ACTIVATED_POSITION));
 		}
 
+		setActivateOnItemClick(activateOnItemClick);
+		
 		super.onViewCreated(view, savedInstanceState);
 	}
 
@@ -101,10 +108,11 @@ public class ImageSetOverview extends SherlockFragment {
 
 		ProgressBar emptyView = new ProgressBar(getActivity());
 
-		FrameLayout.LayoutParams emptyViewParams = new FrameLayout.LayoutParams(80, 80, Gravity.CENTER);
-		
+		FrameLayout.LayoutParams emptyViewParams = new FrameLayout.LayoutParams(
+				80, 80, Gravity.CENTER);
+
 		container.addView(emptyView, emptyViewParams);
-		
+
 		mImageSetView.setEmptyView(emptyView);
 
 		return mImageSetView;
@@ -137,9 +145,13 @@ public class ImageSetOverview extends SherlockFragment {
 	public void setActivateOnItemClick(boolean activateOnItemClick) {
 		// When setting CHOICE_MODE_SINGLE, ListView will automatically
 		// give items the 'activated' state when touched.
-		((ListView) getActivity().findViewById(android.R.id.list))
-				.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
-						: ListView.CHOICE_MODE_NONE);
+
+		this.activateOnItemClick = activateOnItemClick;
+
+		if (mImageSetView != null)
+			mImageSetView
+					.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
+							: ListView.CHOICE_MODE_NONE);
 	}
 
 	private void setActivatedPosition(int position) {
@@ -150,5 +162,21 @@ public class ImageSetOverview extends SherlockFragment {
 		}
 
 		mActivatedPosition = position;
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.overview_menu, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.menu_refresh:
+			mImageSetAdapter.clear();
+			return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 }

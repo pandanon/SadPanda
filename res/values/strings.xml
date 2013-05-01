@@ -8,4 +8,5 @@
     <string name="thumb_description">This is a thumnail of the image set</string>
     <string name="comments_handle">View Comments</string>
     <string name="description_handle">View Description</string>
+    <string name="refresh_menu">Refresh</string>
 </resources>
