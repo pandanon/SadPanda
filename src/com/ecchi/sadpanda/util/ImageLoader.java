@@ -285,7 +285,7 @@ public class ImageLoader {
 			}
 		}
 	}
-
+	
 	class AsyncDrawable extends BitmapDrawable {
 		private final WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference;
 

@@ -27,6 +27,7 @@ public class ImageSetDetailFragment extends SherlockFragment {
 	 * The dummy content this fragment is presenting.
 	 */
 	private ImageSetDescription mImageSet;
+	private ImageSetDetailAdapter mImageAdapter;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,11 +40,15 @@ public class ImageSetDetailFragment extends SherlockFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (getArguments().containsKey(ARG_ITEM_ID)) {
-			// Load the dummy content specified by the fragment
-			// arguments. In a real-world scenario, use a Loader
-			// to load content from a content provider.
-			mImageSet = getArguments().getParcelable(ARG_ITEM_ID);
+		if (savedInstanceState == null) {
+			if (getArguments().containsKey(ARG_ITEM_ID)) {
+				// Load the dummy content specified by the fragment
+				// arguments. In a real-world scenario, use a Loader
+				// to load content from a content provider.
+				mImageSet = getArguments().getParcelable(ARG_ITEM_ID);
+			}
+		} else {
+			mImageSet = savedInstanceState.getParcelable(ARG_ITEM_ID);
 		}
 	}
 
@@ -65,6 +70,12 @@ public class ImageSetDetailFragment extends SherlockFragment {
 
 		return rootView;
 	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {	
+		super.onSaveInstanceState(outState);
+		outState.putParcelable(ARG_ITEM_ID, mImageSet);
+	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -73,11 +84,11 @@ public class ImageSetDetailFragment extends SherlockFragment {
 		if (mImageSet != null) {
 			GridView thumbView = (GridView) view.findViewById(R.id.thumb_view);
 			String baseUrl = mImageSet.getSetUrl() + "?p=";
-			ImageSetDetailAdapter adapter = new ImageSetDetailAdapter(baseUrl, this
-					.getActivity());
-			thumbView.setAdapter(adapter);
-			thumbView.setOnScrollListener(adapter);
-			
+			mImageAdapter = new ImageSetDetailAdapter(baseUrl,
+					this.getActivity());
+			thumbView.setAdapter(mImageAdapter);
+			thumbView.setOnScrollListener(mImageAdapter);
+
 			thumbView.setEmptyView(view.findViewById(R.id.empty));
 		}
 	}

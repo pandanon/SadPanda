@@ -3,13 +3,10 @@ package com.ecchi.sadpanda.detailview;
 import java.util.List;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.tasks.LoadDetailDescriptionPageTask;
@@ -55,9 +52,6 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetThumb> {
 		thumb.setLayoutParams(new LinearLayout.LayoutParams(100, height));
 
 		mImageLoader.loadBitmap(item.getThumbUrl(), thumb);
-
-		TextView thumbText = (TextView)convertView.findViewById(R.id.thumb_text);
-		thumbText.setText(String.valueOf(position));
 		
 		return convertView;
 	}
