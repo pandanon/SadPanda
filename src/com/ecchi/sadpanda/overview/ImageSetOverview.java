@@ -18,8 +18,11 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.util.ImageSetDescription;
+import com.michaelnovakjr.numberpicker.NumberPickerDialog;
+import com.michaelnovakjr.numberpicker.NumberPickerDialog.OnNumberSetListener;
 
-public class ImageSetOverview extends SherlockFragment {
+public class ImageSetOverview extends SherlockFragment implements
+		OnNumberSetListener {
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -97,7 +100,7 @@ public class ImageSetOverview extends SherlockFragment {
 		}
 
 		setActivateOnItemClick(activateOnItemClick);
-		
+
 		super.onViewCreated(view, savedInstanceState);
 	}
 
@@ -163,20 +166,32 @@ public class ImageSetOverview extends SherlockFragment {
 
 		mActivatedPosition = position;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.overview_menu, menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
+		switch (item.getItemId()) {
 		case R.id.menu_refresh:
-			mImageSetAdapter.clear();
+			mImageSetAdapter.clear(true);
 			return true;
-			default:
-				return super.onOptionsItemSelected(item);
+		case R.id.go_to_page:
+			NumberPickerDialog dialog = new NumberPickerDialog(getActivity(),
+					-1, mImageSetAdapter.getCurrentPage());
+			dialog.setOnNumberSetListener(this);
+			dialog.show();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onNumberSet(int selectedNumber) {
+		if(selectedNumber >= 0)
+			mImageSetAdapter.goToPage(selectedNumber);
 	}
 }

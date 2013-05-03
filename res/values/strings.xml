@@ -9,4 +9,5 @@
     <string name="comments_handle">View Comments</string>
     <string name="description_handle">View Description</string>
     <string name="refresh_menu">Refresh</string>
+    <string name="go_to_page">Go to page ..</string>
 </resources>

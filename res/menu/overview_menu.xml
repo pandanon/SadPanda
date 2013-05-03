@@ -4,4 +4,8 @@
           android:icon="@drawable/ic_menu_refresh"
           android:title="@string/refresh_menu"
           android:showAsAction="ifRoom"/>
+    
+    <item android:id="@+id/go_to_page"
+        android:title="@string/go_to_page"
+        android:showAsAction="never"/>
 </menu>

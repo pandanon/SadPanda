@@ -64,14 +64,19 @@ public abstract class PagedScrollAdapter<T> extends BaseAdapter implements
 		failedLoading = true;
 	}
 
-	public void clear() {
+	/***
+	 * 
+	 * @param notify true if the adapter should notify its listeners after clearing its contents
+	 */
+	public void clear(boolean notify) {
 		if (data.size() > 0) {
 			data.clear();
 
 			mCurrentPage = 0;
 			previousTotal = 0;
 			loading = false;
-			notifyDataSetChanged();
+			if(notify)
+				notifyDataSetChanged();
 		}
 	}
 
@@ -93,8 +98,9 @@ public abstract class PagedScrollAdapter<T> extends BaseAdapter implements
 
 	public void goToPage(int page) {
 		if (page >= 0) {
-			clear();
+			clear(false);
 			mCurrentPage = page;
+			notifyDataSetChanged();
 		}
 	}
 
