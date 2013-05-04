@@ -85,7 +85,7 @@ public class ImageLoader {
 		mMemoryCache.evictAll();
 	}
 
-	public void loadBitmap(String url, ImageView imageView) {
+	public void loadBitmap(String url, ImageView imageView) {		
 		// always cancel possible previous tasks, or bad things will happen
 		if (cancelPotentialWork(url, imageView)) {
 			// check memory first
