@@ -4,51 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.widget.AbsListView;
-import android.widget.BaseAdapter;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.BaseAdapter;
 
 public abstract class PagedScrollAdapter<T> extends BaseAdapter implements
-		OnScrollListener {
-	boolean loading = false;
-	boolean failedLoading = false;
-	int previousTotal = 0;
+		OnScrollListener, OnAddPageListener<T> {
+
+	boolean mLoading = false;
+	int mPreviousTotal = 0;
 	int mCurrentPage = 0;
 
-	private List<T> data;
+	private List<T> mData;
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	public PagedScrollAdapter() {
-		data = new ArrayList<T>();
+		mData = new ArrayList<T>();
 	}
 
 	@Override
 	public T getItem(int position) {
-		return data.get(position);
+		return mData.get(position);
 	}
 
 	@Override
 	public int getCount() {
-		return data.size();
+		return mData.size();
 	}
 
 	@Override
 	public final void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 
-		if (loading) {
-			if (totalItemCount > previousTotal) {
-				loading = false;
-				previousTotal = totalItemCount;
+		if (mLoading) {
+			if (totalItemCount > mPreviousTotal) {
+				mLoading = false;
+				mPreviousTotal = totalItemCount;
 			}
 		}
-		if (!loading && !failedLoading
+		if (!mLoading
 				&& ((firstVisibleItem + visibleItemCount) > totalItemCount - 1)) {
-			loading = true;
+			mLoading = true;
 			loadNewDataSet();
 		}
 
@@ -56,26 +55,22 @@ public abstract class PagedScrollAdapter<T> extends BaseAdapter implements
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void failedLoading() {
-		failedLoading = true;
 	}
 
 	/***
 	 * 
-	 * @param notify true if the adapter should notify its listeners after clearing its contents
+	 * @param notify
+	 *            true if the adapter should notify its listeners after clearing
+	 *            its contents
 	 */
 	public void clear(boolean notify) {
-		if (data.size() > 0) {
-			data.clear();
+		if (mData.size() > 0) {
+			mData.clear();
 
 			mCurrentPage = 0;
-			previousTotal = 0;
-			loading = false;
-			if(notify)
+			mPreviousTotal = 0;
+			mLoading = false;
+			if (notify)
 				notifyDataSetChanged();
 		}
 	}
@@ -91,7 +86,7 @@ public abstract class PagedScrollAdapter<T> extends BaseAdapter implements
 	 * called.
 	 */
 	public void addPage(List<T> dataSet) {
-		data.addAll(dataSet);
+		mData.addAll(dataSet);
 		notifyDataSetChanged();
 		mCurrentPage++;
 	}
@@ -102,6 +97,10 @@ public abstract class PagedScrollAdapter<T> extends BaseAdapter implements
 			mCurrentPage = page;
 			notifyDataSetChanged();
 		}
+	}
+
+	public void setLoading(boolean loading) {
+		mLoading = loading;
 	}
 
 	public int getCurrentPage() {

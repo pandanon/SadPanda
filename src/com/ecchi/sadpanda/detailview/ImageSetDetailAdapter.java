@@ -9,18 +9,18 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.ecchi.sadpanda.R;
-import com.ecchi.sadpanda.tasks.LoadDetailDescriptionPageTask;
 import com.ecchi.sadpanda.tasks.LoadDetailPageTask;
+import com.ecchi.sadpanda.tasks.LoadDetailPageTask.ImageContainer;
 import com.ecchi.sadpanda.util.CroppedImageView;
 import com.ecchi.sadpanda.util.ImageLoader;
 import com.ecchi.sadpanda.util.ImageSetDetailDescription;
-import com.ecchi.sadpanda.util.ImageSetThumb;
+import com.ecchi.sadpanda.util.ImageSetItem;
 import com.ecchi.sadpanda.util.PagedScrollAdapter;
 
-public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetThumb> {
+public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> implements ImageContainer {
 
-	int currentPage = 0;
-	int totalPages = 1;
+	int mCurrentPage = 0;
+	int mTotalPages = 1;
 	public static final int PADDING = 5;
 
 	ImageSetDetailDescription mDescription;
@@ -40,7 +40,7 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetThumb> {
 			convertView = View.inflate(parent.getContext(), R.layout.thumb_view_item, null);
 
 		convertView.setLayoutParams( new GridView.LayoutParams(100, 164));
-		ImageSetThumb item = getItem(position);	
+		ImageSetItem item = getItem(position);	
 		
 		CroppedImageView thumb = (CroppedImageView)convertView.findViewById(R.id.thumb);
 		// if the height has been predefined on the page, use it.
@@ -58,25 +58,19 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetThumb> {
 
 	@Override
 	public void loadNewDataSet() {
-		if (currentPage < totalPages) {
-			if (currentPage > 0)
-				new LoadDetailPageTask(this).execute(baseUrl + currentPage);
-			else
-				new LoadDetailDescriptionPageTask(this).execute(baseUrl
-						+ currentPage);
+		if (mCurrentPage < mTotalPages) {
+				new LoadDetailPageTask(this).execute(baseUrl + mCurrentPage);				
 		}
 	}
 
-	public void setImageSetDetailDescription(
-			ImageSetDetailDescription description) {
-		mDescription = description;
-		totalPages = mDescription.getTotalPages();
+	public void setTotalPages(int totalPages) {
+		mTotalPages = totalPages;
 	}
 
 	@Override
-	public void addPage(List<ImageSetThumb> dataSet) {
+	public void addPage(List<ImageSetItem> dataSet) {
 		super.addPage(dataSet);
-		currentPage++;
+		mCurrentPage++;
 	}
 	
 	public ImageLoader getImageLoader()

@@ -75,7 +75,6 @@ public class LoginTask extends AsyncTask<String, Void, HttpResponse> {
 
 	@Override
 	protected void onPostExecute(HttpResponse result) {
-		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 		if (isCancelled()) {
 			listener.onLoginFailed();

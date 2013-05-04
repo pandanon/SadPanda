@@ -238,7 +238,6 @@ public class DiskLruImageCache {
 		try {
 			mDiskCache.remove(key);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

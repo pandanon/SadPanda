@@ -4,25 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.imageviewer.ViewerActivity;
+import com.ecchi.sadpanda.tasks.LoadDetailDescriptionPageTask;
+import com.ecchi.sadpanda.tasks.LoadDetailDescriptionPageTask.ImageDescriptionContainer;
 import com.ecchi.sadpanda.util.ImageSetDescription;
-import com.ecchi.sadpanda.util.ImageSetThumb;
+import com.ecchi.sadpanda.util.ImageSetDetailDescription;
+import com.ecchi.sadpanda.util.ImageSetItem;
 
 /**
  * A fragment representing a single ImageSet detail screen. This fragment is
  * either contained in a {@link ImageSetListActivity} in two-pane mode (on
  * tablets) or a {@link ImageSetDetailActivity} on handsets.
  */
-public class ImageSetDetailFragment extends SherlockFragment {
+public class ImageSetDetailFragment extends SherlockFragment implements
+		ImageDescriptionContainer {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -92,6 +95,12 @@ public class ImageSetDetailFragment extends SherlockFragment {
 			String baseUrl = mImageSet.getSetUrl() + "?p=";
 			mImageAdapter = new ImageSetDetailAdapter(baseUrl,
 					this.getActivity());
+			// First time, we load the detail description as well (pass along
+			// the existing description to save parsing time)
+			new LoadDetailDescriptionPageTask(mImageAdapter, this, mImageSet)
+					.execute(baseUrl + 0);
+			mImageAdapter.setLoading(true);
+
 			thumbView.setAdapter(mImageAdapter);
 			thumbView.setOnScrollListener(mImageAdapter);
 
@@ -101,13 +110,22 @@ public class ImageSetDetailFragment extends SherlockFragment {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					ImageSetThumb clickedPage = mImageAdapter.getItem(position);
-					
-					Intent viewerIntent = new Intent(getActivity(), ViewerActivity.class);
-					viewerIntent.putExtra(ViewerActivity.CLICKED_PAGE_URL_KEY, clickedPage);
+					ImageSetItem clickedPage = mImageAdapter.getItem(position);
+
+					Intent viewerIntent = new Intent(getActivity(),
+							ViewerActivity.class);
+					viewerIntent.putExtra(ViewerActivity.CLICKED_PAGE_URL_KEY,
+							clickedPage);
 					startActivity(viewerIntent);
 				}
 			});
 		}
+	}
+
+	@Override
+	public void setImageSetDetailDescription(
+			ImageSetDetailDescription description) {
+		mImageSet = description;
+		mImageAdapter.setTotalPages(description.getTotalPages());
 	}
 }

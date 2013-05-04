@@ -69,7 +69,6 @@ public class ImageSetOverview extends SherlockFragment implements
 
 	@Override
 	public void onAttach(Activity activity) {
-		// TODO Auto-generated method stub
 		super.onAttach(activity);
 
 		mImageSetAdapter = new ImageSetOverviewAdapter(getArguments()

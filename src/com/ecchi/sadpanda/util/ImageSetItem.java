@@ -4,21 +4,21 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 
-public class ImageSetThumb implements Parcelable {
+public class ImageSetItem implements Parcelable {
 	String mThumbUrl;
 	String mImagePageUrl;
 	String mImageLinkUrl;
 	int mHeight;
 	int mPosition;
 	
-	public ImageSetThumb(String url, String imagePageUrl,int height, int position) {
+	public ImageSetItem(String url, String imagePageUrl,int height, int position) {
 		mThumbUrl = url;
 		mHeight = height;
 		mImagePageUrl = imagePageUrl;
 		mPosition = position;
 	}
 	
-	private ImageSetThumb(Parcel in) {
+	private ImageSetItem(Parcel in) {
 		mThumbUrl = in.readString();
 		mImagePageUrl = in.readString();
 		mHeight = in.readInt();
@@ -54,7 +54,6 @@ public class ImageSetThumb implements Parcelable {
 
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -67,13 +66,13 @@ public class ImageSetThumb implements Parcelable {
 		dest.writeString(mImageLinkUrl==null?"":mImageLinkUrl);
 	}
 	
-	public static final Parcelable.Creator<ImageSetThumb> CREATOR = new Parcelable.Creator<ImageSetThumb>() {
-		public ImageSetThumb createFromParcel(Parcel in) {
-			return new ImageSetThumb(in);
+	public static final Parcelable.Creator<ImageSetItem> CREATOR = new Parcelable.Creator<ImageSetItem>() {
+		public ImageSetItem createFromParcel(Parcel in) {
+			return new ImageSetItem(in);
 		}
 
-		public ImageSetThumb[] newArray(int size) {
-			return new ImageSetThumb[size];
+		public ImageSetItem[] newArray(int size) {
+			return new ImageSetItem[size];
 		}
 	};
 }

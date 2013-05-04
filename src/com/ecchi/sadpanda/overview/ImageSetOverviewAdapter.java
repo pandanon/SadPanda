@@ -34,19 +34,16 @@ public class ImageSetOverviewAdapter extends PagedScrollAdapter<ImageSetDescript
 	
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	@Override
 	public boolean areAllItemsEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 
 		ImageSetDescription description = getItem(position);
 

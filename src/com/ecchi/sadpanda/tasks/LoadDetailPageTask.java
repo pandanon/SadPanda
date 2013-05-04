@@ -3,24 +3,29 @@ package com.ecchi.sadpanda.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ecchi.sadpanda.detailview.ImageSetDetailAdapter;
-import com.ecchi.sadpanda.util.ImageSetThumb;
+import com.ecchi.sadpanda.util.ImageLoader;
+import com.ecchi.sadpanda.util.ImageSetItem;
+import com.ecchi.sadpanda.util.OnAddPageListener;
 
-public class LoadDetailPageTask extends LoadPageTask<ImageSetThumb> {
+public class LoadDetailPageTask extends LoadPageTask<ImageSetItem> {
 
-	public LoadDetailPageTask(ImageSetDetailAdapter pageAdapter) {
+	public interface ImageContainer extends OnAddPageListener<ImageSetItem> {
+		public ImageLoader getImageLoader();
+	}
+	
+	public LoadDetailPageTask(ImageContainer pageAdapter) {
 		super(pageAdapter);
 	}
 
 	@Override
-	protected List<ImageSetThumb> parseHtmlContent(String content) {
+	protected List<ImageSetItem> parseHtmlContent(String content) {
 
 		String token = "class=\"gdtm";
 		String strippedContent = content.substring(content.indexOf(token)
 				+ token.length());
 		String[] thumbsContent = strippedContent.split(token);
 
-		List<ImageSetThumb> thumbUrls = new ArrayList<ImageSetThumb>();
+		List<ImageSetItem> thumbUrls = new ArrayList<ImageSetItem>();
 
 		for (int i = 0; i < thumbsContent.length; i++) {
 			String thumbUrl;
@@ -48,14 +53,16 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetThumb> {
 				// easier to cut combined thumbs into pieces and write to file
 				// than to translate the imageviews
 				if (i == 0) {
-					((ImageSetDetailAdapter) mAdapter).getImageLoader()
+					((ImageContainer) mAdapter).getImageLoader()
 							.cutBitmapToDisk(thumbUrl);
 				}
 
 				thumbUrl += "-" + i;
 			}
 
-			thumbUrls.add(new ImageSetThumb(thumbUrl, imagePageUrl, height, i));
+			ImageSetItem newItem = new ImageSetItem(thumbUrl, imagePageUrl, height, i);
+			thumbUrls.add(newItem);
+			publishProgress(newItem);
 		}
 
 		return thumbUrls;
