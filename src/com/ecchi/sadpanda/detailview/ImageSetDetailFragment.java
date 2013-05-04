@@ -1,15 +1,21 @@
 package com.ecchi.sadpanda.detailview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.ecchi.sadpanda.R;
+import com.ecchi.sadpanda.imageviewer.ViewerActivity;
 import com.ecchi.sadpanda.util.ImageSetDescription;
+import com.ecchi.sadpanda.util.ImageSetThumb;
 
 /**
  * A fragment representing a single ImageSet detail screen. This fragment is
@@ -70,9 +76,9 @@ public class ImageSetDetailFragment extends SherlockFragment {
 
 		return rootView;
 	}
-	
+
 	@Override
-	public void onSaveInstanceState(Bundle outState) {	
+	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putParcelable(ARG_ITEM_ID, mImageSet);
 	}
@@ -90,6 +96,18 @@ public class ImageSetDetailFragment extends SherlockFragment {
 			thumbView.setOnScrollListener(mImageAdapter);
 
 			thumbView.setEmptyView(view.findViewById(R.id.empty));
+
+			thumbView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					ImageSetThumb clickedPage = mImageAdapter.getItem(position);
+					
+					Intent viewerIntent = new Intent(getActivity(), ViewerActivity.class);
+					viewerIntent.putExtra(ViewerActivity.CLICKED_PAGE_URL_KEY, clickedPage);
+					startActivity(viewerIntent);
+				}
+			});
 		}
 	}
 }

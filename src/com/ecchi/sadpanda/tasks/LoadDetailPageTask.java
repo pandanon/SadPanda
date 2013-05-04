@@ -23,17 +23,22 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetThumb> {
 		List<ImageSetThumb> thumbUrls = new ArrayList<ImageSetThumb>();
 
 		for (int i = 0; i < thumbsContent.length; i++) {
-			String url;
+			String thumbUrl;
 			int height = -1;
-
-			int startIdx = thumbsContent[i].indexOf("url(") + 4;
+			token = "href=\"";
+			int startIdx = thumbsContent[i].indexOf(token) + token.length();
+			int endIdx = thumbsContent[i].indexOf("\"", startIdx);
+			String imagePageUrl = thumbsContent[i].substring(startIdx, endIdx);
+			
+			token = "url(";
+			startIdx = thumbsContent[i].indexOf(token) + token.length();
 			if (startIdx == 3) {
 				startIdx = thumbsContent[i].indexOf("src=\"") + 5;
-				int endIdx = thumbsContent[i].indexOf("\"", startIdx);
-				url = thumbsContent[i].substring(startIdx, endIdx);
+				endIdx = thumbsContent[i].indexOf("\"", startIdx);
+				thumbUrl = thumbsContent[i].substring(startIdx, endIdx);
 			} else {
-				int endIdx = thumbsContent[i].indexOf(")", startIdx);
-				url = thumbsContent[i].substring(startIdx, endIdx);
+				endIdx = thumbsContent[i].indexOf(")", startIdx);
+				thumbUrl = thumbsContent[i].substring(startIdx, endIdx);
 
 				startIdx = thumbsContent[i].indexOf(" height:") + 8;
 				endIdx = thumbsContent[i].indexOf("px;", startIdx);
@@ -44,13 +49,13 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetThumb> {
 				// than to translate the imageviews
 				if (i == 0) {
 					((ImageSetDetailAdapter) mAdapter).getImageLoader()
-							.cutBitmapToDisk(url);
+							.cutBitmapToDisk(thumbUrl);
 				}
 
-				url += "-" + i;
+				thumbUrl += "-" + i;
 			}
 
-			thumbUrls.add(new ImageSetThumb(url, height));
+			thumbUrls.add(new ImageSetThumb(thumbUrl, imagePageUrl, height, i));
 		}
 
 		return thumbUrls;
