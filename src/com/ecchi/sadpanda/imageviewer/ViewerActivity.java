@@ -7,10 +7,8 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.ecchi.sadpanda.util.ImageSetItem;
 
 public class ViewerActivity extends SherlockActivity {
-	public static final String AVAILABLE_URL_KEY = "available_url_key";
-	static final String IMAGE_URL_KEY = "image_url_key";
-	public static final String CLICKED_PAGE_URL_KEY = "clicked_page_url_key";
-	public static final String BASE_URL = "base_url";
+	public static final String BASE_URL_KEY = "base_url";
+	public static final String SIZE_KEY = "size_key";
 
 	ImageSetItem mOpenedImagePage;
 	private ViewPager mViewPager;
@@ -24,9 +22,11 @@ public class ViewerActivity extends SherlockActivity {
 
 		setContentView(mViewPager);
 
-		String baseUrl = getIntent().getExtras().getString(BASE_URL);		
+		String baseUrl = getIntent().getExtras().getString(BASE_URL_KEY);		
+		int size = getIntent().getExtras().getInt(SIZE_KEY);
 		
-		mAdapter = new ViewerAdapter(this,baseUrl);
+		mAdapter = new ViewerAdapter(this,baseUrl,size);
 		mViewPager.setAdapter(mAdapter);		
 	}
+
 }

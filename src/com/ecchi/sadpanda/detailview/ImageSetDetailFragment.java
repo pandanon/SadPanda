@@ -114,8 +114,11 @@ public class ImageSetDetailFragment extends SherlockFragment implements
 
 					Intent viewerIntent = new Intent(getActivity(),
 							ViewerActivity.class);
-					viewerIntent.putExtra(ViewerActivity.CLICKED_PAGE_URL_KEY,
-							clickedPage);
+					String baseUrl = mImageSet.getSetUrl() + "?p=";
+					viewerIntent.putExtra(ViewerActivity.BASE_URL_KEY, baseUrl);
+					viewerIntent.putExtra(ViewerActivity.SIZE_KEY,
+							((ImageSetDetailDescription) mImageSet)
+									.getTotalItems());
 					startActivity(viewerIntent);
 				}
 			});
@@ -126,6 +129,6 @@ public class ImageSetDetailFragment extends SherlockFragment implements
 	public void setImageSetDetailDescription(
 			ImageSetDetailDescription description) {
 		mImageSet = description;
-		mImageAdapter.setTotalPages(description.getTotalPages());
+		mImageAdapter.setTotalPages(description.getTotalItems()/20+1);
 	}
 }

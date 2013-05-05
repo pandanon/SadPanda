@@ -30,9 +30,9 @@ public class LoadDetailDescriptionPageTask extends LoadDetailPageTask {
 		int startIdx = content.indexOf(token) + token.length();
 		int endIdx = content.indexOf(" images", startIdx);
 		String[] imageNumber = content.substring(startIdx, endIdx).split(" ");
-		int totalPages = Integer.parseInt(imageNumber[imageNumber.length - 1]) / 20 + 1;
+		int totalItems = Integer.parseInt(imageNumber[imageNumber.length - 1]);
 
-		copyExistingDescription(totalPages);
+		copyExistingDescription(totalItems);
 
 		return super.parseHtmlContent(content);
 	}
