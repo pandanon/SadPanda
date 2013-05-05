@@ -7,7 +7,6 @@ import android.os.Parcelable;
 public class ImageSetItem implements Parcelable {
 	String mThumbUrl;
 	String mImagePageUrl;
-	String mImageLinkUrl;
 	int mHeight;
 	int mPosition;
 	
@@ -30,9 +29,6 @@ public class ImageSetItem implements Parcelable {
 		mImagePageUrl = in.readString();
 		mHeight = in.readInt();
 		mPosition = in.readInt();
-		String tempLink = in.readString();
-		if(!tempLink.equals(""))
-			mImageLinkUrl = tempLink;
 	}
 
 	public int getHeight() {
@@ -50,14 +46,6 @@ public class ImageSetItem implements Parcelable {
 	public int getPosition() {
 		return mPosition;
 	}
-	
-	public String getImageLinkUrl() {
-		return mImageLinkUrl;
-	}
-	
-	public void setImageLinkUrl(String imageLinkUrl) {
-		mImageLinkUrl = imageLinkUrl;
-	}
 
 	@Override
 	public int describeContents() {
@@ -70,7 +58,6 @@ public class ImageSetItem implements Parcelable {
 		dest.writeString(mImagePageUrl);
 		dest.writeInt(mHeight);
 		dest.writeInt(mPosition);
-		dest.writeString(mImageLinkUrl==null?"":mImageLinkUrl);
 	}
 	
 	public static final Parcelable.Creator<ImageSetItem> CREATOR = new Parcelable.Creator<ImageSetItem>() {

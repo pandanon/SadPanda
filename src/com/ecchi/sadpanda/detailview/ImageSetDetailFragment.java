@@ -114,8 +114,8 @@ public class ImageSetDetailFragment extends SherlockFragment implements
 
 					Intent viewerIntent = new Intent(getActivity(),
 							ViewerActivity.class);
-					String baseUrl = mImageSet.getSetUrl() + "?p=";
-					viewerIntent.putExtra(ViewerActivity.BASE_URL_KEY, baseUrl);
+					viewerIntent.putExtra(ViewerActivity.START_URL_KEY, clickedPage.getImagePageUrl());
+					viewerIntent.putExtra(ViewerActivity.START_POSITION_KEY, position);
 					viewerIntent.putExtra(ViewerActivity.SIZE_KEY,
 							((ImageSetDetailDescription) mImageSet)
 									.getTotalItems());

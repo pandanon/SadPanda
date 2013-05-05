@@ -2,48 +2,58 @@ package com.ecchi.sadpanda.tasks;
 
 import android.os.AsyncTask;
 
-import com.ecchi.sadpanda.tasks.LoadDetailPageImageTask.ImageSetViewer;
-import com.ecchi.sadpanda.util.ImageSetItem;
 import com.ecchi.sadpanda.util.Utils;
 
-public class LoadImageLinkTask extends AsyncTask<ImageSetItem, Void, ImageSetItem> {
+public class LoadImageLinkTask extends AsyncTask<String, Void, ImageSetLink> {
+
+	public interface ImageSetViewer {
+		public void addImageSetLink(ImageSetLink link);
+	}
 	
 	ImageSetViewer mViewer;
-	
-	public LoadImageLinkTask(ImageSetViewer viewer)
-	{
+	int position;
+
+	public LoadImageLinkTask(ImageSetViewer viewer, int position) {
 		mViewer = viewer;
 	}
-	
-	@Override
-	protected ImageSetItem doInBackground(ImageSetItem... params) {
-		ImageSetItem item = params[0];
-		String imageUrl = null;
-		// check if task hasn't been called on accident and the link was loaded
-		// already
-		if (item != null && item.getImageLinkUrl() == null) {
-			String result = Utils.LoadSadPandaLink(item.getImagePageUrl());
-			
-			String token = "<div id=\"i3\">";
-			int startIdx = result.indexOf(token);
-			token = "src=\"";
-			startIdx = result.indexOf(token, startIdx) + token.length();			
-			int endIdx = result.indexOf("\"", startIdx);
-			
-			imageUrl = result.substring(startIdx, endIdx);			
-		}
 
-		synchronized (item) {
-			item.setImageLinkUrl(imageUrl);
-		}
-		
-		return item;
-	}
-	
 	@Override
-	protected void onPostExecute(ImageSetItem result) {
-		super.onPostExecute(result);
+	protected ImageSetLink doInBackground(String... params) {		
+		String imageUrl = null;
+		String previousUrl = null;
+		String nextUrl = null;
 		
-		mViewer.addImageSetItem(result);
+		String result = Utils.LoadSadPandaLink(params[0]);
+		
+		String token = "id=\"prev\"";
+		int startIdx = result.indexOf(token);
+		token = "href=\"";
+		startIdx = result.indexOf(token, startIdx) + token.length();
+		int endIdx = result.indexOf("\"", startIdx);
+		previousUrl = result.substring(startIdx, endIdx);
+		
+		token = "id=\"next\"";
+		startIdx = result.indexOf(token);
+		token = "href=\"";
+		startIdx = result.indexOf(token, startIdx) + token.length();
+		endIdx = result.indexOf("\"", startIdx);
+		nextUrl = result.substring(startIdx, endIdx);
+		
+		token = "<div id=\"i3\">";
+		startIdx = result.indexOf(token);
+		token = "src=\"";
+		startIdx = result.indexOf(token, startIdx) + token.length();			
+		endIdx = result.indexOf("\"", startIdx);
+		
+		imageUrl = result.substring(startIdx, endIdx);			
+		
+		return new ImageSetLink(previousUrl, nextUrl, imageUrl, position);
+	}
+
+	@Override
+	protected void onPostExecute(ImageSetLink result) {
+		super.onPostExecute(result);
+
+		mViewer.addImageSetLink(result);
 	}
 }
