@@ -10,6 +10,7 @@ public class ViewerActivity extends SherlockActivity {
 	public static final String AVAILABLE_URL_KEY = "available_url_key";
 	static final String IMAGE_URL_KEY = "image_url_key";
 	public static final String CLICKED_PAGE_URL_KEY = "clicked_page_url_key";
+	public static final String BASE_URL = "base_url";
 
 	ImageSetItem mOpenedImagePage;
 	private ViewPager mViewPager;
@@ -23,7 +24,9 @@ public class ViewerActivity extends SherlockActivity {
 
 		setContentView(mViewPager);
 
-		mAdapter = new ViewerAdapter(this);
-		mViewPager.setAdapter(mAdapter);			
+		String baseUrl = getIntent().getExtras().getString(BASE_URL);		
+		
+		mAdapter = new ViewerAdapter(this,baseUrl);
+		mViewPager.setAdapter(mAdapter);		
 	}
 }

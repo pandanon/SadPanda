@@ -12,8 +12,7 @@ public class LoadDetailPageImageTask extends LoadDetailPageTask {
 	@Override
 	protected void onProgressUpdate(ImageSetItem... values) {	
 		super.onProgressUpdate(values);
-		
-		//TODO start image task
+		new LoadImageLinkTask().execute(values);
 	}
 
 }

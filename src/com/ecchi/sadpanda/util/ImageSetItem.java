@@ -11,6 +11,13 @@ public class ImageSetItem implements Parcelable {
 	int mHeight;
 	int mPosition;
 	
+	/***
+	 * 
+	 * @param url link to the thumbnail of the image
+	 * @param imagePageUrl link to the page with contains the image
+	 * @param height height of the thumbnail, if available
+	 * @param position position in the entire set
+	 */
 	public ImageSetItem(String url, String imagePageUrl,int height, int position) {
 		mThumbUrl = url;
 		mHeight = height;
