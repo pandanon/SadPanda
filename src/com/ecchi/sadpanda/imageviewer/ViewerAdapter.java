@@ -2,42 +2,43 @@ package com.ecchi.sadpanda.imageviewer;
 
 import uk.co.senab.photoview.PhotoView;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView.ScaleType;
 
 import com.ecchi.sadpanda.R;
-import com.ecchi.sadpanda.tasks.ImageSetLink;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask.ImageSetViewer;
 import com.ecchi.sadpanda.util.ImageLoader;
+import com.ecchi.sadpanda.util.ImageSetLink;
 
 public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
+
+	public interface ImageSetLinkDatabase {
+		public ImageSetLink get(int position);
+
+		public void add(int position, ImageSetLink value);
+	}
 
 	public interface ViewPagerChildFinder {
 		public View findChild(int position);
 	}
 
+	ImageSetLinkDatabase mData;
 	ViewPagerChildFinder mViewFinder;
 
 	ImageLoader mLoader;
-	SparseArray<ImageSetLink> mData;
 
 	int mSize = 0;
 	boolean mIsLoading = false;
 	int mItemsLoadedFromPage = 0;
 
-	public ViewerAdapter(Context context, String startUrl, int position,
-			int totalSize) {
+	public ViewerAdapter(Context context, int totalSize, ImageSetLinkDatabase database) {
 		mLoader = new ImageLoader(context);
-		mData = new SparseArray<ImageSetLink>();
-		mSize = totalSize;
-
-		new LoadImageLinkTask(this, position).execute(startUrl);
+		mSize = totalSize;		
+		mData = database;
 	}
 
 	@Override
@@ -120,16 +121,23 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 	@Override
 	public void addImageSetLink(ImageSetLink link) {
 		if (link != null) {
-			mData.append(link.getPosition(), link);
+			mData.add(link.getPosition(), link);
 			updateView(link.getPosition());
 			notifyDataSetChanged();
 		}
 	}
-
+	
+	int mResetPosition = -1;
+	
 	@Override
 	public int getItemPosition(Object object) {
 		int pos = (Integer) ((View) object).getTag();
 
+		if(pos == mResetPosition) {
+			mResetPosition = -1;
+			return POSITION_NONE;
+		}
+		
 		if (mData.get(pos) == null) {
 			if (mData.get(pos - 1) != null || mData.get(pos + 1) != null)
 				return POSITION_NONE;
@@ -138,5 +146,14 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 		} else {
 			return POSITION_UNCHANGED;
 		}
+	}
+	
+	public void clearCachedImage(String url) {
+		mLoader.remove(url);
+	}
+	
+	public void resetView(int position)	{
+		mResetPosition = position;
+		notifyDataSetChanged();
 	}
 }

@@ -2,6 +2,8 @@ package com.ecchi.sadpanda.tasks;
 
 import android.os.AsyncTask;
 
+import com.ecchi.sadpanda.util.HtmlManipulator;
+import com.ecchi.sadpanda.util.ImageSetLink;
 import com.ecchi.sadpanda.util.Utils;
 
 public class LoadImageLinkTask extends AsyncTask<String, Void, ImageSetLink> {
@@ -46,7 +48,7 @@ public class LoadImageLinkTask extends AsyncTask<String, Void, ImageSetLink> {
 		startIdx = result.indexOf(token, startIdx) + token.length();			
 		endIdx = result.indexOf("\"", startIdx);
 		
-		imageUrl = result.substring(startIdx, endIdx);			
+		imageUrl = HtmlManipulator.replaceHtmlEntities(result.substring(startIdx, endIdx));			
 		
 		return new ImageSetLink(previousUrl, nextUrl, imageUrl, params[0], mPosition);
 	}

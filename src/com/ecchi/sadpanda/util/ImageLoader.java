@@ -6,6 +6,8 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 
 import uk.co.senab.photoview.PhotoView;
@@ -19,6 +21,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -89,12 +92,12 @@ public class ImageLoader {
 		mMemoryCache.evictAll();
 	}
 
-	
 	public void loadBitmap(String url, String referer, ImageView imageView) {
 		loadBitmap(url, referer, imageView, null);
 	}
-	
-	public void loadBitmap(String url, String referer, ImageView imageView, View temporaryView) {
+
+	public void loadBitmap(String url, String referer, ImageView imageView,
+			View temporaryView) {
 		// always cancel possible previous tasks, or bad things will happen
 		if (cancelPotentialWork(url, imageView)) {
 			// check memory first
@@ -106,7 +109,7 @@ public class ImageLoader {
 				final AsyncDrawable asyncDrawable = new AsyncDrawable(
 						imageView.getResources(), temporaryView, task);
 				imageView.setImageDrawable(asyncDrawable);
-				task.execute(url,referer);
+				task.execute(url, referer);
 			}
 		}
 	}
@@ -139,7 +142,7 @@ public class ImageLoader {
 		}
 		return null;
 	}
-	
+
 	private static View getTemporaryView(ImageView imageView) {
 		if (imageView != null) {
 			final Drawable drawable = imageView.getDrawable();
@@ -157,14 +160,18 @@ public class ImageLoader {
 		HttpURLConnection conn = null;
 		try {
 			HttpGet imageGet = new HttpGet(url);
-			imageGet.addHeader("Accept-charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3");
+			imageGet.addHeader("Accept-charset",
+					"ISO-8859-1,utf-8;q=0.7,*;q=0.3");
 			imageGet.addHeader("Accept-encoding", "gzip,deflate,sdch");
 			
-			if(referer != null)
+			if (referer != null)
 				imageGet.addHeader("referer", referer);
-			
+
 			HttpResponse response = HomePageBrowser.CLIENT.getClient().execute(
 					imageGet, HomePageBrowser.CLIENT.getContext());
+
+			Log.d("SadPanda", response.getStatusLine().getStatusCode() + ": "
+					+ response.getStatusLine().getReasonPhrase());
 
 			is = response.getEntity().getContent();
 
@@ -192,8 +199,8 @@ public class ImageLoader {
 		return bitmap;
 	}
 
-	private Bitmap putBitmapInDisk(String url, String referer, boolean downSample,
-			int reqWidth, int reqHeight) {
+	private Bitmap putBitmapInDisk(String url, String referer,
+			boolean downSample, int reqWidth, int reqHeight) {
 		if (mDiskCache.containsKey(url.hashCode())) {
 			return mDiskCache.getBitmap(url.hashCode());
 		}
@@ -281,10 +288,11 @@ public class ImageLoader {
 		// Decode image in background.
 		@Override
 		protected Bitmap doInBackground(String... params) {
-			url = params[0];			
+			url = params[0];
 			String referer = params[1];
 
-			return putBitmapInDisk(url, referer, downSample, bitmapWidth, bitmapHeight);
+			return putBitmapInDisk(url, referer, downSample, bitmapWidth,
+					bitmapHeight);
 		}
 
 		// Once complete, see if ImageView is still around and set bitmap.
@@ -305,7 +313,7 @@ public class ImageLoader {
 					if (imageView instanceof PhotoView) {
 						imageView.setVisibility(View.VISIBLE);
 						View v = getTemporaryView(imageView);
-						if(v != null)
+						if (v != null)
 							v.setVisibility(View.GONE);
 						BitmapDrawable drawable = new BitmapDrawable(
 								imageView.getResources(), bitmap);
@@ -318,13 +326,18 @@ public class ImageLoader {
 		}
 	}
 
+	public void remove(String url) {
+		mMemoryCache.remove(url);
+		mDiskCache.remove(url.hashCode());
+	}
+	
 	class AsyncDrawable extends BitmapDrawable {
 		private final WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference;
 		private final WeakReference<View> viewReference;
 
 		public AsyncDrawable(Resources res, View tempView,
 				BitmapWorkerTask bitmapWorkerTask) {
-			super(res, (Bitmap)null);
+			super(res, (Bitmap) null);
 			bitmapWorkerTaskReference = new WeakReference<BitmapWorkerTask>(
 					bitmapWorkerTask);
 			viewReference = new WeakReference<View>(tempView);
@@ -333,7 +346,7 @@ public class ImageLoader {
 		public BitmapWorkerTask getBitmapWorkerTask() {
 			return bitmapWorkerTaskReference.get();
 		}
-		
+
 		public View getTempView() {
 			return viewReference.get();
 		}
