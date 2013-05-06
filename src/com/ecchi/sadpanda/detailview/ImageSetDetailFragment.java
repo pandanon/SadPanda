@@ -25,7 +25,7 @@ import com.ecchi.sadpanda.util.ImageSetItem;
  * tablets) or a {@link ImageSetDetailActivity} on handsets.
  */
 public class ImageSetDetailFragment extends SherlockFragment implements
-		ImageDescriptionContainer {
+		ImageDescriptionContainer, OnItemClickListener {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -106,25 +106,25 @@ public class ImageSetDetailFragment extends SherlockFragment implements
 
 			thumbView.setEmptyView(view.findViewById(R.id.empty));
 
-			thumbView.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					ImageSetItem clickedPage = mImageAdapter.getItem(position);
-
-					Intent viewerIntent = new Intent(getActivity(),
-							ViewerActivity.class);
-					viewerIntent.putExtra(ViewerActivity.START_URL_KEY, clickedPage.getImagePageUrl());
-					viewerIntent.putExtra(ViewerActivity.START_POSITION_KEY, position);
-					viewerIntent.putExtra(ViewerActivity.SIZE_KEY,
-							((ImageSetDetailDescription) mImageSet)
-									.getTotalItems());
-					startActivity(viewerIntent);
-				}
-			});
+			thumbView.setOnItemClickListener(this);
 		}
 	}
 
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		ImageSetItem clickedPage = mImageAdapter.getItem(position);
+
+		Intent viewerIntent = new Intent(getActivity(),
+				ViewerActivity.class);
+		viewerIntent.putExtra(ViewerActivity.START_URL_KEY, clickedPage.getImagePageUrl());
+		viewerIntent.putExtra(ViewerActivity.START_POSITION_KEY, position);
+		viewerIntent.putExtra(ViewerActivity.SIZE_KEY,
+				((ImageSetDetailDescription) mImageSet)
+						.getTotalItems());
+		startActivity(viewerIntent);
+	}
+	
 	@Override
 	public void setImageSetDetailDescription(
 			ImageSetDetailDescription description) {

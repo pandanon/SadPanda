@@ -11,9 +11,10 @@ public class LoadImageLinkTask extends AsyncTask<String, Void, ImageSetLink> {
 	}
 	
 	ImageSetViewer mViewer;
-	int position;
+	int mPosition;
 
 	public LoadImageLinkTask(ImageSetViewer viewer, int position) {
+		mPosition = position;
 		mViewer = viewer;
 	}
 
@@ -47,7 +48,7 @@ public class LoadImageLinkTask extends AsyncTask<String, Void, ImageSetLink> {
 		
 		imageUrl = result.substring(startIdx, endIdx);			
 		
-		return new ImageSetLink(previousUrl, nextUrl, imageUrl, position);
+		return new ImageSetLink(previousUrl, nextUrl, imageUrl, params[0], mPosition);
 	}
 
 	@Override

@@ -4,10 +4,12 @@ public class ImageSetLink {
 	final String mPreviousPageUrl;
 	final String mNextPageUrl;
 	final String mCurrentImageUrl;
+	final String mCurrentPageUrl;
 	final int mPosition;
 	
-	public ImageSetLink(String previousPage, String nextPage, String imageUrl, int position) {
+	public ImageSetLink(String previousPage, String nextPage, String imageUrl, String pageUrl, int position) {
 		mCurrentImageUrl = imageUrl;
+		mCurrentPageUrl =pageUrl;
 		mNextPageUrl = nextPage;
 		mPreviousPageUrl = previousPage;
 		mPosition = position;
@@ -15,6 +17,10 @@ public class ImageSetLink {
 	
 	public String getCurrentImageUrl() {
 		return mCurrentImageUrl;
+	}
+	
+	public String getCurrentPageUrl() {
+		return mCurrentPageUrl;
 	}
 	
 	public String getNextPageUrl() {

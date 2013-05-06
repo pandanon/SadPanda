@@ -33,6 +33,7 @@ public class ViewerActivity extends SherlockActivity implements
 		mAdapter = new ViewerAdapter(this, startUrl, startPosition, size);
 		mAdapter.setViewPagerChildFinder(this);
 		mViewPager.setAdapter(mAdapter);
+		mViewPager.setCurrentItem(startPosition);
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> impl
 		
 		thumb.setLayoutParams(new LinearLayout.LayoutParams(100, height));
 
-		mImageLoader.loadBitmap(item.getThumbUrl(), thumb);
+		mImageLoader.loadBitmap(item.getThumbUrl(), null, thumb);
 		
 		return convertView;
 	}

@@ -54,7 +54,7 @@ public class ImageSetOverviewAdapter extends PagedScrollAdapter<ImageSetDescript
 		}
 		ImageView thumb = ViewHolder.get(convertView, R.id.setThumb);
 
-		bitmapLoader.loadBitmap(description.getSetThumbUrl(), thumb);
+		bitmapLoader.loadBitmap(description.getSetThumbUrl(), null, thumb);
 
 		// set title
 		TextView name = ViewHolder.get(convertView, R.id.setName);
