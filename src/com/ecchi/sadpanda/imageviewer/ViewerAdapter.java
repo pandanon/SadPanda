@@ -8,11 +8,17 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView.ScaleType;
 
+import com.ecchi.sadpanda.HomePageBrowser;
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask.ImageSetViewer;
-import com.ecchi.sadpanda.util.ImageLoader;
 import com.ecchi.sadpanda.util.ImageSetLink;
+import com.novoda.imageloader.core.ImageManager;
+import com.novoda.imageloader.core.LoaderSettings;
+import com.novoda.imageloader.core.cache.LruBitmapCache;
+import com.novoda.imageloader.core.loader.ConcurrentLoader;
+import com.novoda.imageloader.core.model.ImageTag;
+import com.novoda.imageloader.core.model.ImageTagFactory;
 
 public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 
@@ -29,16 +35,23 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 	ImageSetLinkDatabase mData;
 	ViewPagerChildFinder mViewFinder;
 
-	ImageLoader mLoader;
+	ConcurrentLoader mLoader;
+	ImageTagFactory mTagFactory;
 
 	int mSize = 0;
 	boolean mIsLoading = false;
 	int mItemsLoadedFromPage = 0;
 
-	public ViewerAdapter(Context context, int totalSize, ImageSetLinkDatabase database) {
-		mLoader = new ImageLoader(context);
-		mSize = totalSize;		
+	public ViewerAdapter(Context context, int totalSize,
+			ImageSetLinkDatabase database) {
+		mSize = totalSize;
 		mData = database;
+
+		LoaderSettings settings = new LoaderSettings.SettingsBuilder()
+		.withCacheManager(new LruBitmapCache(context)).build(context);
+
+		mLoader = new ConcurrentLoader(settings);
+		mTagFactory = ImageTagFactory.newInstance(context, R.drawable.progress_drawable);
 	}
 
 	@Override
@@ -54,25 +67,19 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		container.removeView((View) object);
-		ImageSetLink item = mData.get(position);
-		if (item != null)
-			ImageLoader.cancelPotentialWork(item.getCurrentImageUrl(),
-					((PhotoView) ((View) object).findViewById(R.id.photoView)));
 	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		ImageSetLink item = mData.get(position);
-		View view = null;
-
-		view = View
-				.inflate(container.getContext(), R.layout.loading_view, null);
-		view.setTag(position);
+		PhotoView view = new PhotoView(container.getContext());
+		view.setId(position);
 
 		if (item != null) {
 			setView(view, position);
 		} else {
 			loadPage(position);
+			view.setImageResource(R.drawable.progress_drawable);
 		}
 
 		container.addView(view, LayoutParams.MATCH_PARENT,
@@ -81,20 +88,23 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 		return view;
 	}
 
-	void setView(View view, int position) {
+	void setView(PhotoView view, int position) {
 		ImageSetLink item = mData.get(position);
 
-		PhotoView photo = (PhotoView) view.findViewById(R.id.photoView);
-		photo.setScaleType(ScaleType.FIT_START);
-		mLoader.loadBitmap(item.getCurrentImageUrl(), item.getCurrentPageUrl(),
-				photo, view.findViewById(R.id.empty));
+		view.setScaleType(ScaleType.FIT_START);
+
+		ImageTag tag = mTagFactory.build(item.getCurrentImageUrl(),
+				view.getContext());
+		tag.setDescription(String.valueOf(position));
+		view.setTag(tag);
+		mLoader.load(view);
 	}
 
 	void updateView(int position) {
 		if (mViewFinder != null) {
 			View child = mViewFinder.findChild(position);
 			if (child != null) {
-				setView(child, position);
+				setView((PhotoView) child, position);
 			}
 
 		}
@@ -126,18 +136,18 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 			notifyDataSetChanged();
 		}
 	}
-	
+
 	int mResetPosition = -1;
-	
+
 	@Override
 	public int getItemPosition(Object object) {
-		int pos = (Integer) ((View) object).getTag();
+		int pos = (Integer) ((View) object).getId();
 
-		if(pos == mResetPosition) {
+		if (pos == mResetPosition) {
 			mResetPosition = -1;
 			return POSITION_NONE;
 		}
-		
+
 		if (mData.get(pos) == null) {
 			if (mData.get(pos - 1) != null || mData.get(pos + 1) != null)
 				return POSITION_NONE;
@@ -147,12 +157,8 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 			return POSITION_UNCHANGED;
 		}
 	}
-	
-	public void clearCachedImage(String url) {
-		mLoader.remove(url);
-	}
-	
-	public void resetView(int position)	{
+
+	public synchronized void resetView(int position) {
 		mResetPosition = position;
 		notifyDataSetChanged();
 	}

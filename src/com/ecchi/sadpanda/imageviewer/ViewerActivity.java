@@ -6,10 +6,6 @@ import android.util.SparseArray;
 import android.view.View;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.imageviewer.ViewerAdapter.ImageSetLinkDatabase;
 import com.ecchi.sadpanda.imageviewer.ViewerAdapter.ViewPagerChildFinder;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask;
@@ -74,7 +70,7 @@ public class ViewerActivity extends SherlockActivity implements
 
 	@Override
 	public View findChild(int position) {
-		return mViewPager.findViewWithTag(position);
+		return mViewPager.findViewById(position);
 	}
 
 	@Override
@@ -101,6 +97,7 @@ public class ViewerActivity extends SherlockActivity implements
 		outState.putInt(STORED_POSITION, mViewPager.getCurrentItem());
 	}
 
+	/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = new MenuInflater(this);
@@ -119,5 +116,5 @@ public class ViewerActivity extends SherlockActivity implements
 			return true;
 		}
 		return false;
-	}
+	}*/
 }
