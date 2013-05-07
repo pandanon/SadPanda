@@ -7,6 +7,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 
+import com.ecchi.sadpanda.tasks.LoadPageTask.OnAddPageListener;
+
 public abstract class PagedScrollAdapter<T> extends BaseAdapter implements
 		OnScrollListener, OnAddPageListener<T> {
 

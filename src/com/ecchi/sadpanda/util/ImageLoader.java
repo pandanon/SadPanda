@@ -6,12 +6,9 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 
 import uk.co.senab.photoview.PhotoView;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;

@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView.ScaleType;
 
-import com.ecchi.sadpanda.HomePageBrowser;
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask.ImageSetViewer;
 import com.ecchi.sadpanda.util.ImageSetLink;
-import com.novoda.imageloader.core.ImageManager;
 import com.novoda.imageloader.core.LoaderSettings;
 import com.novoda.imageloader.core.cache.LruBitmapCache;
 import com.novoda.imageloader.core.loader.ConcurrentLoader;
@@ -51,7 +49,7 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 		.withCacheManager(new LruBitmapCache(context)).build(context);
 
 		mLoader = new ConcurrentLoader(settings);
-		mTagFactory = ImageTagFactory.newInstance(context, R.drawable.progress_drawable);
+		mTagFactory = ImageTagFactory.newInstance(context, R.drawable.sadpanda);
 	}
 
 	@Override
@@ -79,7 +77,7 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 			setView(view, position);
 		} else {
 			loadPage(position);
-			view.setImageResource(R.drawable.progress_drawable);
+			view.setImageResource(R.drawable.sadpanda);
 		}
 
 		container.addView(view, LayoutParams.MATCH_PARENT,

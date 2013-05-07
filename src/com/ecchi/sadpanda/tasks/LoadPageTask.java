@@ -5,11 +5,14 @@ import java.util.List;
 import android.os.AsyncTask;
 
 import com.ecchi.sadpanda.util.ImageSetItem;
-import com.ecchi.sadpanda.util.OnAddPageListener;
 import com.ecchi.sadpanda.util.Utils;
 
 public abstract class LoadPageTask<T> extends AsyncTask<String, ImageSetItem, List<T>> {
 
+	public interface OnAddPageListener<T> {
+		public void addPage(List<T> result);
+	}
+	
 	protected OnAddPageListener<T> mAdapter;
 	
 	public LoadPageTask(OnAddPageListener<T> pageAdapter)

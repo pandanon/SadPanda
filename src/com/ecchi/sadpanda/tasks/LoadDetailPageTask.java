@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.ecchi.sadpanda.util.ImageLoader;
 import com.ecchi.sadpanda.util.ImageSetItem;
-import com.ecchi.sadpanda.util.OnAddPageListener;
 
 public class LoadDetailPageTask extends LoadPageTask<ImageSetItem> {
 
