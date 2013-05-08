@@ -8,16 +8,17 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
+import com.ecchi.sadpanda.HomePageBrowser;
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.tasks.LoadDetailPageTask;
-import com.ecchi.sadpanda.tasks.LoadDetailPageTask.ImageContainer;
 import com.ecchi.sadpanda.util.CroppedImageView;
-import com.ecchi.sadpanda.util.ImageLoader;
 import com.ecchi.sadpanda.util.ImageSetDetailDescription;
 import com.ecchi.sadpanda.util.ImageSetItem;
 import com.ecchi.sadpanda.util.PagedScrollAdapter;
+import com.novoda.imageloader.core.loader.Loader;
+import com.novoda.imageloader.core.model.ImageTagFactory;
 
-public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> implements ImageContainer {
+public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> {
 
 	int mCurrentPage = 0;
 	int mTotalPages = 1;
@@ -25,13 +26,15 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> impl
 
 	ImageSetDetailDescription mDescription;
 
-	ImageLoader mImageLoader;
+	Loader mLoader;
+	ImageTagFactory mTagFactory;
 
 	String baseUrl;
 
 	public ImageSetDetailAdapter(String url, Context context) {
 		this.baseUrl = url;
-		mImageLoader = new ImageLoader(context);
+		mLoader = HomePageBrowser.getImageLoader();
+		mTagFactory = ImageTagFactory.newInstance(context, -1);
 	}
 
 	@Override
@@ -43,17 +46,25 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> impl
 		ImageSetItem item = getItem(position);	
 		
 		CroppedImageView thumb = (CroppedImageView)convertView.findViewById(R.id.thumb);
-		// if the height has been predefined on the page, use it.
-		int height = item.getHeight();
+		initCroppedThumb(thumb, item);
 		
-		if(height == -1)
-			height = 144;
+		thumb.setTag(mTagFactory.build(item.getThumbUrl(), parent.getContext()));
 		
-		thumb.setLayoutParams(new LinearLayout.LayoutParams(100, height));
-
-		mImageLoader.loadBitmap(item.getThumbUrl(), null, thumb);
+		mLoader.load(thumb);
 		
 		return convertView;
+	}
+	
+	void initCroppedThumb(CroppedImageView thumbnail, ImageSetItem item) {
+		int height = item.getHeight(), width = item.getWidth();
+		
+		if(height == -1 && width == -1) {
+			height = 144;
+			width = 100;
+		}
+		
+		thumbnail.setBounds(item.getOffset(), 0, width, height);
+		thumbnail.setLayoutParams(new LinearLayout.LayoutParams(width, height));
 	}
 
 	@Override
@@ -71,10 +82,5 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> impl
 	public void addPage(List<ImageSetItem> dataSet) {
 		super.addPage(dataSet);
 		mCurrentPage++;
-	}
-	
-	public ImageLoader getImageLoader()
-	{
-		return mImageLoader;
 	}
 }

@@ -23,6 +23,11 @@ import com.ecchi.sadpanda.overview.ImageSetOverview;
 import com.ecchi.sadpanda.overview.ImageSetOverview.Callbacks;
 import com.ecchi.sadpanda.util.ClientWrapper;
 import com.ecchi.sadpanda.util.ImageSetDescription;
+import com.novoda.imageloader.core.ImageManager;
+import com.novoda.imageloader.core.LoaderSettings;
+import com.novoda.imageloader.core.cache.LruBitmapCache;
+import com.novoda.imageloader.core.loader.ConcurrentLoader;
+import com.novoda.imageloader.core.loader.Loader;
 
 
 public class HomePageBrowser extends SherlockFragmentActivity implements
@@ -40,12 +45,19 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 
 	boolean mTwoPane = false;
 
+	public static ImageManager mManager;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_imageset_list);
 
+		LoaderSettings settings = new LoaderSettings.SettingsBuilder()
+		.withCacheManager(new LruBitmapCache(this)).build(this);
+
+		mManager = new ImageManager(settings);
+		
 		CLIENT = ClientWrapper.newInstance(UA, this);
 
 		if (findViewById(R.id.imageset_detail_container) != null) {
@@ -184,6 +196,9 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 		isLoggedIn = false;
 		if (login != null)
 			login.setTitle("Log in");
-
+	}
+	
+	public static Loader getImageLoader() {
+		return mManager.getLoader();
 	}
 }

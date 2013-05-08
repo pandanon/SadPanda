@@ -8,11 +8,7 @@ import com.ecchi.sadpanda.util.ImageSetItem;
 
 public class LoadDetailPageTask extends LoadPageTask<ImageSetItem> {
 
-	public interface ImageContainer extends OnAddPageListener<ImageSetItem> {
-		public ImageLoader getImageLoader();
-	}
-
-	public LoadDetailPageTask(ImageContainer pageAdapter) {
+	public LoadDetailPageTask(OnAddPageListener<ImageSetItem> pageAdapter) {
 		super(pageAdapter);
 	}
 
@@ -28,7 +24,7 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetItem> {
 
 		for (int i = 0; i < thumbsContent.length; i++) {
 			String thumbUrl;
-			int height = -1;
+			int height = -1, width = -1, offset = -1;
 			int position = -1;
 
 			String tokenIn = "href=\"";
@@ -51,24 +47,28 @@ public class LoadDetailPageTask extends LoadPageTask<ImageSetItem> {
 				endIdx = thumbsContent[i].indexOf(")", startIdx);
 				thumbUrl = thumbsContent[i].substring(startIdx, endIdx);
 
+				//get offset
+				startIdx = endIdx +2;
+				endIdx = thumbsContent[i].indexOf("px", startIdx);
+				offset = Integer.parseInt(thumbsContent[i].substring(startIdx, endIdx));
+				
+				//get width
+				tokenIn = " width:";
+				startIdx = thumbsContent[i].indexOf(tokenIn) + tokenIn.length();
+				endIdx = thumbsContent[i].indexOf("px;", startIdx);
+				width = Integer.parseInt(thumbsContent[i].substring(startIdx,
+						endIdx));
+				
+				//get height
 				tokenIn = " height:";
 				startIdx = thumbsContent[i].indexOf(tokenIn) + tokenIn.length();
 				endIdx = thumbsContent[i].indexOf("px;", startIdx);
 				height = Integer.parseInt(thumbsContent[i].substring(startIdx,
 						endIdx));
-
-				// easier to cut combined thumbs into pieces and write to file
-				// than to translate the imageviews
-				if (i == 0) {
-					((ImageContainer) mAdapter).getImageLoader()
-							.cutBitmapToDisk(thumbUrl);
-				}
-
-				thumbUrl += "-" + i;
 			}
 
 			ImageSetItem newItem = new ImageSetItem(thumbUrl, imagePageUrl,
-					height, position);
+					height, width, offset, position);
 			thumbUrls.add(newItem);
 			publishProgress(newItem);
 		}

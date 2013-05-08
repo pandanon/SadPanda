@@ -12,6 +12,9 @@ import android.widget.ImageView;
  */
 public class CroppedImageView extends ImageView {
  
+	int mDx, mDy, mWidth, mHeight;
+	boolean isInit = false;
+	
     public CroppedImageView(Context context) {
         super(context);
         setScaleType(ScaleType.MATRIX);
@@ -31,23 +34,33 @@ public class CroppedImageView extends ImageView {
  
     @Override
     protected boolean setFrame(int l, int t, int r, int b) {
-        Matrix matrix = getImageMatrix();
+    	if(!isInit)
+    		return false;
+    	
+    	Matrix matrix = getImageMatrix();
             
         float scale;
         int viewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         int viewHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        int drawableWidth = getDrawable().getIntrinsicWidth();
-        int drawableHeight = getDrawable().getIntrinsicHeight();
         
-        if (drawableWidth * viewHeight > drawableHeight * viewWidth) {
-            scale = (float) viewHeight / (float) drawableHeight;
+        if (mWidth * viewHeight > mHeight * viewWidth) {
+            scale = (float) viewHeight / (float) mHeight;
         } else {
-            scale = (float) viewWidth / (float) drawableWidth;
+            scale = (float) viewWidth / (float) mWidth;
         }
             
         matrix.setScale(scale, scale);
+        matrix.postTranslate(mDx, mDy);
         setImageMatrix(matrix);
             
         return super.setFrame(l, t, r, b);
     }        
+    
+    public void setBounds(int dx, int dy, int width, int height) {    	
+    	mDx = dx;
+    	mDy = dy;    	
+    	mWidth = width;
+    	mHeight = height;
+    	isInit = true;
+    }    
 }

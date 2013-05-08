@@ -17,7 +17,7 @@ public class LoadDetailDescriptionPageTask extends LoadDetailPageTask {
 	ImageDescriptionContainer mContainer;
 	ImageSetDescription mExistingDescription;
 
-	public LoadDetailDescriptionPageTask(ImageContainer pageAdapter,
+	public LoadDetailDescriptionPageTask(OnAddPageListener<ImageSetItem> pageAdapter,
 			ImageDescriptionContainer container, ImageSetDescription description) {
 		super(pageAdapter);
 		mContainer = container;

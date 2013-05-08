@@ -1,24 +1,30 @@
 package com.ecchi.sadpanda.imageviewer;
 
+import java.lang.ref.WeakReference;
+
 import uk.co.senab.photoview.PhotoView;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
+import com.ecchi.sadpanda.HomePageBrowser;
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask;
 import com.ecchi.sadpanda.tasks.LoadImageLinkTask.ImageSetViewer;
 import com.ecchi.sadpanda.util.ImageSetLink;
 import com.novoda.imageloader.core.LoaderSettings;
+import com.novoda.imageloader.core.OnImageLoadedListener;
 import com.novoda.imageloader.core.cache.LruBitmapCache;
 import com.novoda.imageloader.core.loader.ConcurrentLoader;
+import com.novoda.imageloader.core.loader.Loader;
 import com.novoda.imageloader.core.model.ImageTag;
 import com.novoda.imageloader.core.model.ImageTagFactory;
 
-public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
+public class ViewerAdapter extends PagerAdapter implements ImageSetViewer, OnImageLoadedListener {
 
 	public interface ImageSetLinkDatabase {
 		public ImageSetLink get(int position);
@@ -33,7 +39,7 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 	ImageSetLinkDatabase mData;
 	ViewPagerChildFinder mViewFinder;
 
-	ConcurrentLoader mLoader;
+	Loader mLoader;
 	ImageTagFactory mTagFactory;
 
 	int mSize = 0;
@@ -44,12 +50,11 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 			ImageSetLinkDatabase database) {
 		mSize = totalSize;
 		mData = database;
-
-		LoaderSettings settings = new LoaderSettings.SettingsBuilder()
-		.withCacheManager(new LruBitmapCache(context)).build(context);
-
-		mLoader = new ConcurrentLoader(settings);
-		mTagFactory = ImageTagFactory.newInstance(context, R.drawable.sadpanda);
+		
+		mLoader = HomePageBrowser.getImageLoader();		
+		mTagFactory = ImageTagFactory.newInstance(context, -1);
+		mTagFactory.setErrorImageId(R.drawable.sadpanda);
+		mLoader.setLoadListener(new WeakReference<OnImageLoadedListener>(this));
 	}
 
 	@Override
@@ -70,14 +75,13 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		ImageSetLink item = mData.get(position);
-		PhotoView view = new PhotoView(container.getContext());
+		View view = View.inflate(container.getContext(), R.layout.loading_view, null);
 		view.setId(position);
-
+		
 		if (item != null) {
 			setView(view, position);
 		} else {
 			loadPage(position);
-			view.setImageResource(R.drawable.sadpanda);
 		}
 
 		container.addView(view, LayoutParams.MATCH_PARENT,
@@ -86,23 +90,25 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 		return view;
 	}
 
-	void setView(PhotoView view, int position) {
+	void setView(View view, int position) {
 		ImageSetLink item = mData.get(position);
 
-		view.setScaleType(ScaleType.FIT_START);
-
+		PhotoView photo = (PhotoView)view.findViewById(R.id.photoView);
+		photo.setScaleType(ScaleType.FIT_START);
+		photo.setId(position);
+		
 		ImageTag tag = mTagFactory.build(item.getCurrentImageUrl(),
 				view.getContext());
 		tag.setDescription(String.valueOf(position));
-		view.setTag(tag);
-		mLoader.load(view);
+		photo.setTag(tag);
+		mLoader.load(photo);
 	}
 
 	void updateView(int position) {
 		if (mViewFinder != null) {
 			View child = mViewFinder.findChild(position);
 			if (child != null) {
-				setView((PhotoView) child, position);
+				setView(child, position);
 			}
 
 		}
@@ -159,5 +165,16 @@ public class ViewerAdapter extends PagerAdapter implements ImageSetViewer {
 	public synchronized void resetView(int position) {
 		mResetPosition = position;
 		notifyDataSetChanged();
+	}
+
+	@Override
+	public void onImageLoaded(ImageView arg0) {
+		if(mViewFinder != null) {
+			View view = mViewFinder.findChild(arg0.getId());
+			if(view != null) {
+				view.findViewById(R.id.empty).setVisibility(View.GONE);
+			}
+		}
+		arg0.setVisibility(View.VISIBLE);
 	}
 }

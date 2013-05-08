@@ -7,7 +7,8 @@ import android.os.Parcelable;
 public class ImageSetItem implements Parcelable {
 	String mThumbUrl;
 	String mImagePageUrl;
-	int mHeight;
+	int mHeight, mWidth;
+	int mOffset;
 	int mPosition;
 	
 	/***
@@ -17,9 +18,11 @@ public class ImageSetItem implements Parcelable {
 	 * @param height height of the thumbnail, if available
 	 * @param position position in the entire set
 	 */
-	public ImageSetItem(String url, String imagePageUrl,int height, int position) {
+	public ImageSetItem(String url, String imagePageUrl,int height, int width, int offset, int position) {
 		mThumbUrl = url;
 		mHeight = height;
+		mWidth = width;
+		mOffset = offset;
 		mImagePageUrl = imagePageUrl;
 		mPosition = position;
 	}
@@ -28,11 +31,21 @@ public class ImageSetItem implements Parcelable {
 		mThumbUrl = in.readString();
 		mImagePageUrl = in.readString();
 		mHeight = in.readInt();
-		mPosition = in.readInt();
+		mWidth = in.readInt();
+		mOffset = in.readInt();
+		mPosition = in.readInt();		
 	}
 
 	public int getHeight() {
 		return mHeight;
+	}
+	
+	public int getWidth() {
+		return mWidth;
+	}
+	
+	public int getOffset() {
+		return mOffset;
 	}
 	
 	public String getThumbUrl() {
@@ -57,6 +70,8 @@ public class ImageSetItem implements Parcelable {
 		dest.writeString(mThumbUrl);
 		dest.writeString(mImagePageUrl);
 		dest.writeInt(mHeight);
+		dest.writeInt(mWidth);
+		dest.writeInt(mOffset);
 		dest.writeInt(mPosition);
 	}
 	

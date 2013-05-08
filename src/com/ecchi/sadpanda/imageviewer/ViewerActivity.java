@@ -18,7 +18,7 @@ public class ViewerActivity extends SherlockActivity implements
 	public static final String START_POSITION_KEY = "start_position";
 	public static final String SIZE_KEY = "size_key";
 
-	static final int retainedPages = 3;
+	static final int retainedPages = 1;
 	static final int refreshId = 480063552;
 	static final String IMAGE_SET_DATA = "image_set_data";
 	static final String STORED_POSITION = "stored_position";
