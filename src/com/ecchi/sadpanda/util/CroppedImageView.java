@@ -37,20 +37,8 @@ public class CroppedImageView extends ImageView {
     	if(!isInit)
     		return false;
     	
-    	Matrix matrix = getImageMatrix();
-            
-        float scale;
-        int viewWidth = getWidth() - getPaddingLeft() - getPaddingRight();
-        int viewHeight = getHeight() - getPaddingTop() - getPaddingBottom();
-        
-        if (mWidth * viewHeight > mHeight * viewWidth) {
-            scale = (float) viewHeight / (float) mHeight;
-        } else {
-            scale = (float) viewWidth / (float) mWidth;
-        }
-            
-        matrix.setScale(scale, scale);
-        matrix.postTranslate(mDx, mDy);
+    	Matrix matrix = getImageMatrix();                     
+        matrix.setTranslate(mDx, mDy);
         setImageMatrix(matrix);
             
         return super.setFrame(l, t, r, b);

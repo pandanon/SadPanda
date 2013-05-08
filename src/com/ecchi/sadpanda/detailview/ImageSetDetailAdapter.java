@@ -8,13 +8,15 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
-import com.ecchi.sadpanda.HomePageBrowser;
 import com.ecchi.sadpanda.R;
 import com.ecchi.sadpanda.tasks.LoadDetailPageTask;
 import com.ecchi.sadpanda.util.CroppedImageView;
 import com.ecchi.sadpanda.util.ImageSetDetailDescription;
 import com.ecchi.sadpanda.util.ImageSetItem;
 import com.ecchi.sadpanda.util.PagedScrollAdapter;
+import com.novoda.imageloader.core.LoaderSettings;
+import com.novoda.imageloader.core.cache.LruBitmapCache;
+import com.novoda.imageloader.core.loader.ConcurrentLoader;
 import com.novoda.imageloader.core.loader.Loader;
 import com.novoda.imageloader.core.model.ImageTagFactory;
 
@@ -33,7 +35,12 @@ public class ImageSetDetailAdapter extends PagedScrollAdapter<ImageSetItem> {
 
 	public ImageSetDetailAdapter(String url, Context context) {
 		this.baseUrl = url;
-		mLoader = HomePageBrowser.getImageLoader();
+		
+		LoaderSettings settings = new LoaderSettings.SettingsBuilder()
+		.withCacheManager(new LruBitmapCache(context))
+		.withoutResizing(true).build(context);
+		
+		mLoader = new ConcurrentLoader(settings);
 		mTagFactory = ImageTagFactory.newInstance(context, -1);
 	}
 

@@ -1,6 +1,5 @@
 package com.ecchi.sadpanda;
 
-
 import org.apache.http.cookie.Cookie;
 
 import android.content.Intent;
@@ -26,9 +25,7 @@ import com.ecchi.sadpanda.util.ImageSetDescription;
 import com.novoda.imageloader.core.ImageManager;
 import com.novoda.imageloader.core.LoaderSettings;
 import com.novoda.imageloader.core.cache.LruBitmapCache;
-import com.novoda.imageloader.core.loader.ConcurrentLoader;
 import com.novoda.imageloader.core.loader.Loader;
-
 
 public class HomePageBrowser extends SherlockFragmentActivity implements
 		OnLoggedinListener, OnLoginRequestListener, OnLoggedoutListener,
@@ -46,7 +43,7 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 	boolean mTwoPane = false;
 
 	public static ImageManager mManager;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,10 +51,10 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 		setContentView(R.layout.activity_imageset_list);
 
 		LoaderSettings settings = new LoaderSettings.SettingsBuilder()
-		.withCacheManager(new LruBitmapCache(this)).build(this);
+				.withCacheManager(new LruBitmapCache(this)).build(this);
 
 		mManager = new ImageManager(settings);
-		
+
 		CLIENT = ClientWrapper.newInstance(UA, this);
 
 		if (findViewById(R.id.imageset_detail_container) != null) {
@@ -197,7 +194,7 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 		if (login != null)
 			login.setTitle("Log in");
 	}
-	
+
 	public static Loader getImageLoader() {
 		return mManager.getLoader();
 	}
