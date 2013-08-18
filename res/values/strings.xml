@@ -10,4 +10,7 @@
     <string name="description_handle">View Description</string>
     <string name="refresh_menu">Refresh</string>
     <string name="go_to_page">Go to page ..</string>
+    <string name="action_search">Search</string>
+    <string name="app_label">Sadpanda</string>
+    <string name="search_hint">Search&#8230;</string>
 </resources>
