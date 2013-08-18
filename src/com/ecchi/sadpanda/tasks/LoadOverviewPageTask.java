@@ -14,21 +14,21 @@ import com.ecchi.sadpanda.util.PagedScrollAdapter;
 public class LoadOverviewPageTask extends LoadPageTask<ImageSetDescription> {
 
 	public LoadOverviewPageTask(
-			PagedScrollAdapter<ImageSetDescription> pageAdapter) {
+			final PagedScrollAdapter<ImageSetDescription> pageAdapter) {
 		super(pageAdapter);
 	}
 
 	@Override
-	protected List<ImageSetDescription> parseHtmlContent(String content) {
+	protected List<ImageSetDescription> parseHtmlContent(final String content) {
 		if (!(content != null && content.length() > 0))
 			return null;
 
-		List<ImageSetDescription> imageSets = new ArrayList<ImageSetDescription>();
+		final List<ImageSetDescription> imageSets = new ArrayList<ImageSetDescription>();
 
-		SimpleDateFormat commentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm",
-				Locale.ENGLISH);
+		final SimpleDateFormat commentDate = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm", Locale.ENGLISH);
 
-		String[] imageSet = content.split("class=\"gtr");
+		final String[] imageSet = content.split("class=\"gtr");
 
 		for (int i = 1; i < imageSet.length; i++) {
 			int idxStart = -1;
@@ -38,8 +38,8 @@ public class LoadOverviewPageTask extends LoadPageTask<ImageSetDescription> {
 			String token = "alt=\"";
 			idxStart = imageSet[i].indexOf(token) + token.length();
 			idxEnd = imageSet[i].indexOf("\"", idxStart);
-			ImageContent setContent = ImageContent.parseContent(imageSet[i]
-					.substring(idxStart, idxEnd));
+			final ImageContent setContent = ImageContent
+					.parseContent(imageSet[i].substring(idxStart, idxEnd));
 
 			// published
 			token = "nowrap\">";
@@ -49,7 +49,7 @@ public class LoadOverviewPageTask extends LoadPageTask<ImageSetDescription> {
 			try {
 				setPublished = commentDate.parse(imageSet[i].substring(
 						idxStart, idxEnd));
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				setPublished = null;
 			}
 
@@ -57,20 +57,20 @@ public class LoadOverviewPageTask extends LoadPageTask<ImageSetDescription> {
 			token = "class=\"it2";
 			idxStart = imageSet[i].indexOf(token, idxStart) + token.length();
 			token = "src=\"";
-			int tempIdxStart = imageSet[i].indexOf(token, idxStart)
+			final int tempIdxStart = imageSet[i].indexOf(token, idxStart)
 					+ token.length();
 			String setThumbUrl = null;
 			int tempIdxEnd = imageSet[i].indexOf("</div>", idxStart);
 
 			if (tempIdxStart > tempIdxEnd || tempIdxStart == token.length() - 1) {
 				token = "~";
-				int temp2IdxStart = imageSet[i].indexOf(token, idxStart)
+				final int temp2IdxStart = imageSet[i].indexOf(token, idxStart)
 						+ token.length();
-				int temp3IdxStart = imageSet[i].indexOf(token, temp2IdxStart)
-						+ token.length();
+				final int temp3IdxStart = imageSet[i].indexOf(token,
+						temp2IdxStart) + token.length();
 				tempIdxEnd = imageSet[i].indexOf("~", temp3IdxStart);
-				String tempThumbUrl = imageSet[i].substring(temp2IdxStart,
-						tempIdxEnd);
+				final String tempThumbUrl = imageSet[i].substring(
+						temp2IdxStart, tempIdxEnd);
 				setThumbUrl = "http://" + tempThumbUrl.replace("~", "/");
 			} else {
 				idxStart = tempIdxStart;
@@ -96,20 +96,23 @@ public class LoadOverviewPageTask extends LoadPageTask<ImageSetDescription> {
 
 			// set url
 			idxEnd = imageSet[i].indexOf("\"", idxStart);
-			String setUrl = imageSet[i].substring(idxStart, idxEnd);
+			final String setUrl = imageSet[i].substring(idxStart, idxEnd);
 
 			// name
 			token = ">";
 			idxStart = imageSet[i].indexOf(token, idxStart) + token.length();
 			idxEnd = imageSet[i].indexOf("</a>", idxStart);
-			String setName = imageSet[i].substring(idxStart, idxEnd);
+			final String setName = imageSet[i].substring(idxStart, idxEnd);
 
 			// score
 			token = "img/r/";
-			idxStart = imageSet[i].indexOf(token, idxStart) + token.length();
-			idxEnd = imageSet[i].indexOf(".gif", idxStart);
-			int score = Integer.parseInt(imageSet[i]
-					.substring(idxStart, idxEnd));
+
+			// FIXME Not a number exception, hardcoding score to 1 "fixed
+			// idxStart = imageSet[i].indexOf(token, idxStart) + token.length();
+			// idxEnd = imageSet[i].indexOf(".gif", idxStart);
+			// int score = Integer.parseInt(imageSet[i]
+			// .substring(idxStart, idxEnd));
+			final int score = 1;
 
 			// uploader
 			token = "href";
@@ -117,7 +120,7 @@ public class LoadOverviewPageTask extends LoadPageTask<ImageSetDescription> {
 			token = ">";
 			idxStart = imageSet[i].indexOf(token, idxStart) + token.length();
 			idxEnd = imageSet[i].indexOf("</a>", idxStart);
-			String setUploader = imageSet[i].substring(idxStart, idxEnd);
+			final String setUploader = imageSet[i].substring(idxStart, idxEnd);
 
 			imageSets.add(new ImageSetDescription(setContent, setName,
 					setThumbUrl, setPublished, score, setUploader,
