@@ -1,3 +1,9 @@
 [submodule "PhotoView"]
 	path = PhotoView
 	url = https://github.com/chrisbanes/PhotoView.git
+[submodule "ActionBarSherlock"]
+	path = ActionBarSherlock
+	url = https://github.com/JakeWharton/ActionBarSherlock
+[submodule "numberpicker"]
+	path = numberpicker
+	url = https://github.com/michaelnovakjr/numberpicker.git
