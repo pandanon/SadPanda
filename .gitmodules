@@ -3,7 +3,7 @@
 	url = https://github.com/chrisbanes/PhotoView.git
 [submodule "ActionBarSherlock"]
 	path = ActionBarSherlock
-	url = https://github.com/JakeWharton/ActionBarSherlock
+	url = https://github.com/JakeWharton/ActionBarSherlock.git
 [submodule "numberpicker"]
 	path = numberpicker
 	url = https://github.com/michaelnovakjr/numberpicker.git
