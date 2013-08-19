@@ -57,6 +57,11 @@ public class HomePageBrowser extends SherlockFragmentActivity implements
 	if (intent != null && Intent.ACTION_SEARCH.equals(intent.getAction()))
 	    searchQuery = intent.getStringExtra(SearchManager.QUERY);
 
+	// Replace whitespaces with "+" for URL format
+	if (searchQuery != null) {
+	    searchQuery = searchQuery.trim().replace(" ", "+");
+	}
+
 	setContentView(R.layout.activity_imageset_list);
 
 	final LoaderSettings settings = new LoaderSettings.SettingsBuilder()
