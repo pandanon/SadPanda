@@ -109,7 +109,7 @@ public class ViewerActivity extends SherlockActivity implements
 	    mViewPager.setCurrentItem(position + 1);
 
 	}
-	return true;
+	return super.onKeyDown(keyCode, event);
     }
     /*
      * @Override public boolean onCreateOptionsMenu(Menu menu) { MenuInflater
