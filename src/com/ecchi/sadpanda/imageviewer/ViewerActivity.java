@@ -104,9 +104,11 @@ public class ViewerActivity extends SherlockActivity implements
 	if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)) {
 	    final int position = mViewPager.getCurrentItem();
 	    mViewPager.setCurrentItem(position - 1);
+	    return true;
 	} else if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
 	    final int position = mViewPager.getCurrentItem();
 	    mViewPager.setCurrentItem(position + 1);
+	    return true;
 
 	}
 	return super.onKeyDown(keyCode, event);
